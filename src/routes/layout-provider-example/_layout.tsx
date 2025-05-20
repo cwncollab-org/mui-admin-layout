@@ -11,6 +11,7 @@ export const Route = createFileRoute('/layout-provider-example/_layout')({
 function RouteComponent() {
   return (
     <AdminLayout
+      title='Layout Provider Example'
       initialState={{
         sidebarOpen: true,
       }}
