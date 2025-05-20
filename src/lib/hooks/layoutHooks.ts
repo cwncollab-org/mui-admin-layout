@@ -2,7 +2,6 @@ import { useContext } from 'react'
 import { layoutContext } from '../provider/layoutContext'
 import { LayoutState } from '../layout/Layout'
 import { AppBarState } from '../layout/AppBar'
-import { useIsMobile } from './useIsMobile'
 
 export function useLayoutState() {
   const { state, setState } = useContext(layoutContext)
