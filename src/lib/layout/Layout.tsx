@@ -23,18 +23,19 @@ const defaultDrawerWidth = 240
 const defaultCollapsedDrawerWidth = 64
 
 export type LayoutState = {
-  dense?: boolean
-  appBarState?: AppBarState
+  sidebarOpen: boolean
+  appBarState: AppBarState
 }
 
 export type LayoutInitialState = {
-  dense?: boolean
+  sidebarOpen?: boolean
   appBarState?: AppBarInitialState
 }
 
 export type LayoutProps = PropsWithChildren & {
   title?: string | React.ReactNode
   navList?: NavList | NavList[]
+  dense?: boolean
   drawerWidth?: number
   collapsedDrawerWidth?: number
   slotProps?: {
@@ -62,6 +63,7 @@ export function Layout(props: LayoutProps) {
     navList = [],
     drawerWidth = defaultDrawerWidth,
     collapsedDrawerWidth = defaultCollapsedDrawerWidth,
+    dense,
     children,
     slotProps,
     menuItems,
@@ -72,11 +74,21 @@ export function Layout(props: LayoutProps) {
   } = props
 
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(true)
   const [_layoutState, setLayoutState] = useState<LayoutState>(
-    initialState ?? {}
+    initialState
+      ? {
+          sidebarOpen: initialState.sidebarOpen ?? true,
+          appBarState: { ...initialState.appBarState, menuOpen: true },
+        }
+      : {
+          sidebarOpen: true,
+          appBarState: {
+            menuOpen: true,
+          },
+        }
   )
   const layoutState = state ?? _layoutState
+  const sidebarOpen = Boolean(layoutState.sidebarOpen)
 
   const navLists = useMemo(
     () => (Array.isArray(navList) ? navList : [navList]),
@@ -88,12 +100,15 @@ export function Layout(props: LayoutProps) {
   }
 
   const handleSidebarToggle = () => {
-    setSidebarOpen(!sidebarOpen)
+    handleStateChange({
+      ...layoutState,
+      sidebarOpen: !layoutState.sidebarOpen,
+    })
   }
 
   const handleStateChange = (state: LayoutState) => {
-    setLayoutState(state)
     onStateChange?.(state)
+    setLayoutState(state)
   }
 
   const handleMenuOpenChange = (open: boolean) => {
@@ -108,7 +123,7 @@ export function Layout(props: LayoutProps) {
       return (
         <div>
           <Toolbar
-            variant={layoutState.dense ? 'dense' : 'regular'}
+            variant={dense ? 'dense' : 'regular'}
             sx={{
               justifyContent: expanded ? 'flex-end' : 'center',
               display: { xs: 'none', sm: 'flex' },
@@ -126,7 +141,7 @@ export function Layout(props: LayoutProps) {
     }
 
     const renderNavList = (expanded: boolean, navList: NavList) => (
-      <List dense={layoutState.dense} {...slotProps?.list}>
+      <List dense={dense} {...slotProps?.list}>
         {navList.items.map((item, index) => (
           <ListItem
             disablePadding
@@ -171,7 +186,7 @@ export function Layout(props: LayoutProps) {
   return (
     <Box sx={{ display: 'flex', ...sx }}>
       <AppBar
-        dense={layoutState.dense}
+        dense={dense}
         {...slotProps?.appBar}
         title={title}
         sidebarOpen={sidebarOpen}
@@ -237,7 +252,7 @@ export function Layout(props: LayoutProps) {
           overflowX: 'hidden',
         }}
       >
-        <Toolbar variant={layoutState.dense ? 'dense' : 'regular'} />
+        <Toolbar variant={dense ? 'dense' : 'regular'} />
         {children}
       </Box>
     </Box>

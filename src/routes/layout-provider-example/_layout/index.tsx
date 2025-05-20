@@ -1,29 +1,21 @@
 import { Box, FormControlLabel, Stack, Switch } from '@mui/material'
 import { createFileRoute } from '@tanstack/react-router'
-import {
-  useAppBarStateValue,
-  useAppBarStateSetter,
-  useLayoutStateSetter,
-} from '../../../lib/provider/layoutHooks'
-import { useLayoutStateValue } from '../../../lib/provider/layoutHooks'
+import { useAppBarStateValue } from '../../../lib/hooks/layoutHooks'
+import { useLayoutStateValue } from '../../../lib/hooks/layoutHooks'
 
 export const Route = createFileRoute('/layout-provider-example/_layout/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const dense = useLayoutStateValue('dense')
-  const setDense = useLayoutStateSetter('dense')
-  const menuOpen = useAppBarStateValue('menuOpen')
-  const setMenuOpen = useAppBarStateSetter('menuOpen')
+  const { value: menuOpen, setValue: setMenuOpen } =
+    useAppBarStateValue('menuOpen')
+  const { value: sidebarOpen, setValue: setSidebarOpen } =
+    useLayoutStateValue('sidebarOpen')
 
   return (
     <Box sx={{ p: 3 }}>
       <Stack>
-        <FormControlLabel
-          control={<Switch checked={dense} onChange={() => setDense(!dense)} />}
-          label='Dense'
-        />
         <FormControlLabel
           control={
             <Switch
@@ -32,6 +24,15 @@ function RouteComponent() {
             />
           }
           label='Menu Open'
+        />
+        <FormControlLabel
+          control={
+            <Switch
+              checked={sidebarOpen}
+              onChange={() => setSidebarOpen(!sidebarOpen)}
+            />
+          }
+          label='Sidebar Open'
         />
       </Stack>
     </Box>
