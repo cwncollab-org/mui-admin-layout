@@ -8,5 +8,10 @@ export const navList: NavList = {
       label: 'Layout Provider Example',
       url: '/layout-provider-example',
     },
+    {
+      icon: <Form />,
+      label: 'Not Found',
+      url: '/not-found',
+    },
   ],
 }

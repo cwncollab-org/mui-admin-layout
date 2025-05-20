@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as NotFoundImport } from './routes/not-found'
 import { Route as IndexImport } from './routes/index'
 import { Route as LayoutProviderExampleLayoutImport } from './routes/layout-provider-example/_layout'
 import { Route as LayoutProviderExampleLayoutIndexImport } from './routes/layout-provider-example/_layout/index'
@@ -28,6 +29,12 @@ const LayoutProviderExampleImport = createFileRoute(
 const LayoutProviderExampleRoute = LayoutProviderExampleImport.update({
   id: '/layout-provider-example',
   path: '/layout-provider-example',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const NotFoundRoute = NotFoundImport.update({
+  id: '/not-found',
+  path: '/not-found',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -59,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/not-found': {
+      id: '/not-found'
+      path: '/not-found'
+      fullPath: '/not-found'
+      preLoaderRoute: typeof NotFoundImport
       parentRoute: typeof rootRoute
     }
     '/layout-provider-example': {
@@ -118,18 +132,21 @@ const LayoutProviderExampleRouteWithChildren =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/not-found': typeof NotFoundRoute
   '/layout-provider-example': typeof LayoutProviderExampleLayoutRouteWithChildren
   '/layout-provider-example/': typeof LayoutProviderExampleLayoutIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/not-found': typeof NotFoundRoute
   '/layout-provider-example': typeof LayoutProviderExampleLayoutIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/not-found': typeof NotFoundRoute
   '/layout-provider-example': typeof LayoutProviderExampleRouteWithChildren
   '/layout-provider-example/_layout': typeof LayoutProviderExampleLayoutRouteWithChildren
   '/layout-provider-example/_layout/': typeof LayoutProviderExampleLayoutIndexRoute
@@ -137,12 +154,17 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/layout-provider-example' | '/layout-provider-example/'
+  fullPaths:
+    | '/'
+    | '/not-found'
+    | '/layout-provider-example'
+    | '/layout-provider-example/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/layout-provider-example'
+  to: '/' | '/not-found' | '/layout-provider-example'
   id:
     | '__root__'
     | '/'
+    | '/not-found'
     | '/layout-provider-example'
     | '/layout-provider-example/_layout'
     | '/layout-provider-example/_layout/'
@@ -151,11 +173,13 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  NotFoundRoute: typeof NotFoundRoute
   LayoutProviderExampleRoute: typeof LayoutProviderExampleRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  NotFoundRoute: NotFoundRoute,
   LayoutProviderExampleRoute: LayoutProviderExampleRouteWithChildren,
 }
 
@@ -170,11 +194,15 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/not-found",
         "/layout-provider-example"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/not-found": {
+      "filePath": "not-found.tsx"
     },
     "/layout-provider-example": {
       "filePath": "layout-provider-example",
