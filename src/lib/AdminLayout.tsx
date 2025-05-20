@@ -7,18 +7,20 @@ import { NavList } from './layout'
 import { useIsMobile } from './hooks/useIsMobile'
 
 type AdminLayoutProps = PropsWithChildren & {
+  title?: string | React.ReactNode
   navList?: NavList | NavList[]
-  initialState?: LayoutInitialState
   menuItems?: React.ReactNode[]
   mobileMaxWidth?: number
+  initialState?: LayoutInitialState
 }
 
 export function AdminLayout(props: AdminLayoutProps) {
-  const { children, initialState, navList, menuItems, mobileMaxWidth } = props
+  const { title, navList, menuItems, mobileMaxWidth, initialState, children } =
+    props
 
   return (
     <LayoutProvider initialState={initialState} mobileMaxWidth={mobileMaxWidth}>
-      <Internal navList={navList} menuItems={menuItems}>
+      <Internal title={title} navList={navList} menuItems={menuItems}>
         {children}
       </Internal>
     </LayoutProvider>
@@ -26,21 +28,23 @@ export function AdminLayout(props: AdminLayoutProps) {
 }
 
 type InternalProps = PropsWithChildren & {
+  title?: string | React.ReactNode
   navList?: NavList | NavList[]
   menuItems?: React.ReactNode[]
 }
 
 function Internal(props: InternalProps) {
-  const { children, navList, menuItems } = props
+  const { title, navList, menuItems, children } = props
   const { state, setState } = useLayoutState()
   const isMobile = useIsMobile()
 
   return (
     <Layout
-      navList={navList}
       dense={!isMobile}
-      state={state}
+      title={title}
+      navList={navList}
       menuItems={menuItems}
+      state={state}
       onStateChange={setState}
     >
       {children}
