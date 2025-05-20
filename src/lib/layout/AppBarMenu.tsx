@@ -9,6 +9,7 @@ export type AppBarMenuState = {
 export type AppBarMenuInitialState = AppBarMenuState
 
 export type AppBarMenuProps = {
+  dense?: boolean
   menuItems?: React.ReactNode[]
   initialState?: AppBarMenuInitialState
   state?: AppBarMenuState
@@ -16,7 +17,7 @@ export type AppBarMenuProps = {
 }
 
 export function AppBarMenu(props: AppBarMenuProps) {
-  const { menuItems, initialState, state, onMenuOpenChange } = props
+  const { menuItems, initialState, state, onMenuOpenChange, dense } = props
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [_menuOpen, setMenuOpen] = useState(initialState?.menuOpen ?? false)
 
@@ -39,6 +40,8 @@ export function AppBarMenu(props: AppBarMenuProps) {
     onMenuOpenChange?.(false)
   }
 
+  const avatarSize = 32
+
   return (
     <div>
       <IconButton
@@ -47,8 +50,8 @@ export function AppBarMenu(props: AppBarMenuProps) {
         aria-label='search'
         onClick={handleClick}
       >
-        <Avatar sx={{ width: 32, height: 32 }}>
-          <PersonIcon />
+        <Avatar sx={{ width: avatarSize, height: avatarSize }}>
+          <PersonIcon fontSize={dense ? 'small' : 'medium'} />
         </Avatar>
       </IconButton>
       {menuItems && (

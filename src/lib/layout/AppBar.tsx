@@ -53,6 +53,7 @@ export function AppBar(props: AppBarProps) {
       menuItems={menuItems}
       initialState={initialState}
       state={state}
+      dense={dense}
       onMenuOpenChange={onMenuOpenChange}
     />
   )
