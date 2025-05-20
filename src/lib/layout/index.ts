@@ -1,3 +1,3 @@
 export { AppBar } from './AppBar'
-export { AdminLayout as AppLayout } from './AdminLayout'
+export { Layout } from './Layout'
 export { type NavList, type NavItem } from './types'

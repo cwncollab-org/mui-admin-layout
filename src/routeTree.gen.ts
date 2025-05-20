@@ -8,17 +8,26 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as LayoutExampleImport } from './routes/layout-example'
 import { Route as IndexImport } from './routes/index'
+import { Route as LayoutProviderExampleLayoutImport } from './routes/layout-provider-example/_layout'
+import { Route as LayoutProviderExampleLayoutIndexImport } from './routes/layout-provider-example/_layout/index'
+
+// Create Virtual Routes
+
+const LayoutProviderExampleImport = createFileRoute(
+  '/layout-provider-example',
+)()
 
 // Create/Update Routes
 
-const LayoutExampleRoute = LayoutExampleImport.update({
-  id: '/layout-example',
-  path: '/layout-example',
+const LayoutProviderExampleRoute = LayoutProviderExampleImport.update({
+  id: '/layout-provider-example',
+  path: '/layout-provider-example',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -27,6 +36,19 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const LayoutProviderExampleLayoutRoute =
+  LayoutProviderExampleLayoutImport.update({
+    id: '/_layout',
+    getParentRoute: () => LayoutProviderExampleRoute,
+  } as any)
+
+const LayoutProviderExampleLayoutIndexRoute =
+  LayoutProviderExampleLayoutIndexImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => LayoutProviderExampleLayoutRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -39,51 +61,102 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/layout-example': {
-      id: '/layout-example'
-      path: '/layout-example'
-      fullPath: '/layout-example'
-      preLoaderRoute: typeof LayoutExampleImport
+    '/layout-provider-example': {
+      id: '/layout-provider-example'
+      path: '/layout-provider-example'
+      fullPath: '/layout-provider-example'
+      preLoaderRoute: typeof LayoutProviderExampleImport
       parentRoute: typeof rootRoute
+    }
+    '/layout-provider-example/_layout': {
+      id: '/layout-provider-example/_layout'
+      path: '/layout-provider-example'
+      fullPath: '/layout-provider-example'
+      preLoaderRoute: typeof LayoutProviderExampleLayoutImport
+      parentRoute: typeof LayoutProviderExampleRoute
+    }
+    '/layout-provider-example/_layout/': {
+      id: '/layout-provider-example/_layout/'
+      path: '/'
+      fullPath: '/layout-provider-example/'
+      preLoaderRoute: typeof LayoutProviderExampleLayoutIndexImport
+      parentRoute: typeof LayoutProviderExampleLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface LayoutProviderExampleLayoutRouteChildren {
+  LayoutProviderExampleLayoutIndexRoute: typeof LayoutProviderExampleLayoutIndexRoute
+}
+
+const LayoutProviderExampleLayoutRouteChildren: LayoutProviderExampleLayoutRouteChildren =
+  {
+    LayoutProviderExampleLayoutIndexRoute:
+      LayoutProviderExampleLayoutIndexRoute,
+  }
+
+const LayoutProviderExampleLayoutRouteWithChildren =
+  LayoutProviderExampleLayoutRoute._addFileChildren(
+    LayoutProviderExampleLayoutRouteChildren,
+  )
+
+interface LayoutProviderExampleRouteChildren {
+  LayoutProviderExampleLayoutRoute: typeof LayoutProviderExampleLayoutRouteWithChildren
+}
+
+const LayoutProviderExampleRouteChildren: LayoutProviderExampleRouteChildren = {
+  LayoutProviderExampleLayoutRoute:
+    LayoutProviderExampleLayoutRouteWithChildren,
+}
+
+const LayoutProviderExampleRouteWithChildren =
+  LayoutProviderExampleRoute._addFileChildren(
+    LayoutProviderExampleRouteChildren,
+  )
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/layout-example': typeof LayoutExampleRoute
+  '/layout-provider-example': typeof LayoutProviderExampleLayoutRouteWithChildren
+  '/layout-provider-example/': typeof LayoutProviderExampleLayoutIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/layout-example': typeof LayoutExampleRoute
+  '/layout-provider-example': typeof LayoutProviderExampleLayoutIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/layout-example': typeof LayoutExampleRoute
+  '/layout-provider-example': typeof LayoutProviderExampleRouteWithChildren
+  '/layout-provider-example/_layout': typeof LayoutProviderExampleLayoutRouteWithChildren
+  '/layout-provider-example/_layout/': typeof LayoutProviderExampleLayoutIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/layout-example'
+  fullPaths: '/' | '/layout-provider-example' | '/layout-provider-example/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/layout-example'
-  id: '__root__' | '/' | '/layout-example'
+  to: '/' | '/layout-provider-example'
+  id:
+    | '__root__'
+    | '/'
+    | '/layout-provider-example'
+    | '/layout-provider-example/_layout'
+    | '/layout-provider-example/_layout/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  LayoutExampleRoute: typeof LayoutExampleRoute
+  LayoutProviderExampleRoute: typeof LayoutProviderExampleRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  LayoutExampleRoute: LayoutExampleRoute,
+  LayoutProviderExampleRoute: LayoutProviderExampleRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -97,14 +170,28 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/layout-example"
+        "/layout-provider-example"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/layout-example": {
-      "filePath": "layout-example.tsx"
+    "/layout-provider-example": {
+      "filePath": "layout-provider-example",
+      "children": [
+        "/layout-provider-example/_layout"
+      ]
+    },
+    "/layout-provider-example/_layout": {
+      "filePath": "layout-provider-example/_layout.tsx",
+      "parent": "/layout-provider-example",
+      "children": [
+        "/layout-provider-example/_layout/"
+      ]
+    },
+    "/layout-provider-example/_layout/": {
+      "filePath": "layout-provider-example/_layout/index.tsx",
+      "parent": "/layout-provider-example/_layout"
     }
   }
 }

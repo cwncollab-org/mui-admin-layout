@@ -4,19 +4,19 @@ import { Person as PersonIcon } from '@mui/icons-material'
 
 export type AppBarMenuState = {
   menuOpen: boolean
-  onMenuOpenChange?: (open: boolean) => void
 }
 
-export type AppBarMenuInitialState = Pick<AppBarMenuState, 'menuOpen'>
+export type AppBarMenuInitialState = AppBarMenuState
 
 export type AppBarMenuProps = {
   menuItems?: React.ReactNode[]
   initialState?: AppBarMenuInitialState
   state?: AppBarMenuState
+  onMenuOpenChange?: (open: boolean) => void
 }
 
 export function AppBarMenu(props: AppBarMenuProps) {
-  const { menuItems, initialState, state } = props
+  const { menuItems, initialState, state, onMenuOpenChange } = props
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [_menuOpen, setMenuOpen] = useState(initialState?.menuOpen ?? false)
 
@@ -32,11 +32,11 @@ export function AppBarMenu(props: AppBarMenuProps) {
 
   const handleClick = () => {
     setMenuOpen(true)
-    state?.onMenuOpenChange?.(true)
+    onMenuOpenChange?.(true)
   }
   const handleClose = () => {
     setMenuOpen(false)
-    state?.onMenuOpenChange?.(false)
+    onMenuOpenChange?.(false)
   }
 
   return (

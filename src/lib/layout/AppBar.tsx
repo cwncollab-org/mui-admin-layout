@@ -24,6 +24,7 @@ export type AppBarProps = {
   collapsedDrawerWidth: number
   dense?: boolean
   onDrawerToggle: () => void
+  onMenuOpenChange?: (open: boolean) => void
   endSlot?: React.ReactNode
   menuItems?: React.ReactNode[]
   initialState?: AppBarInitialState
@@ -39,6 +40,7 @@ export function AppBar(props: AppBarProps) {
     collapsedDrawerWidth,
     dense,
     onDrawerToggle,
+    onMenuOpenChange,
     endSlot,
     menuItems,
     initialState,
@@ -51,6 +53,7 @@ export function AppBar(props: AppBarProps) {
       menuItems={menuItems}
       initialState={initialState}
       state={state}
+      onMenuOpenChange={onMenuOpenChange}
     />
   )
 

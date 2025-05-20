@@ -22,15 +22,21 @@ import { NavList } from './types'
 const defaultDrawerWidth = 240
 const defaultCollapsedDrawerWidth = 64
 
-export type AppLayoutState = AppBarState
-export type AppLayoutInitialState = AppBarInitialState
+export type LayoutState = {
+  dense?: boolean
+  appBarState?: AppBarState
+}
 
-export type AdminLayoutProps = PropsWithChildren & {
+export type LayoutInitialState = {
+  dense?: boolean
+  appBarState?: AppBarInitialState
+}
+
+export type LayoutProps = PropsWithChildren & {
   title?: string | React.ReactNode
   navList?: NavList | NavList[]
   drawerWidth?: number
   collapsedDrawerWidth?: number
-  dense?: boolean
   slotProps?: {
     appBar?: Omit<
       AppBarProps,
@@ -44,28 +50,33 @@ export type AdminLayoutProps = PropsWithChildren & {
     list?: ListProps
   }
   menuItems?: React.ReactNode[]
-  initialState?: AppLayoutInitialState
-  state?: AppLayoutState
+  initialState?: LayoutInitialState
+  state?: LayoutState
+  onStateChange?: (state: LayoutState) => void
   sx?: SxProps
 }
 
-export function AdminLayout(props: AdminLayoutProps) {
+export function Layout(props: LayoutProps) {
   const {
     title,
     navList = [],
     drawerWidth = defaultDrawerWidth,
     collapsedDrawerWidth = defaultCollapsedDrawerWidth,
-    dense,
     children,
     slotProps,
     menuItems,
     initialState,
     state,
+    onStateChange,
     sx,
   } = props
 
   const [mobileOpen, setMobileOpen] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [_layoutState, setLayoutState] = useState<LayoutState>(
+    initialState ?? {}
+  )
+  const layoutState = state ?? _layoutState
 
   const navLists = useMemo(
     () => (Array.isArray(navList) ? navList : [navList]),
@@ -80,12 +91,24 @@ export function AdminLayout(props: AdminLayoutProps) {
     setSidebarOpen(!sidebarOpen)
   }
 
+  const handleStateChange = (state: LayoutState) => {
+    setLayoutState(state)
+    onStateChange?.(state)
+  }
+
+  const handleMenuOpenChange = (open: boolean) => {
+    handleStateChange({
+      ...layoutState,
+      appBarState: { ...layoutState.appBarState, menuOpen: open },
+    })
+  }
+
   const drawerContent = useMemo(() => {
     const renderNavSidebar = (expanded: boolean) => {
       return (
         <div>
           <Toolbar
-            variant={dense ? 'dense' : 'regular'}
+            variant={layoutState.dense ? 'dense' : 'regular'}
             sx={{
               justifyContent: expanded ? 'flex-end' : 'center',
               display: { xs: 'none', sm: 'flex' },
@@ -103,7 +126,7 @@ export function AdminLayout(props: AdminLayoutProps) {
     }
 
     const renderNavList = (expanded: boolean, navList: NavList) => (
-      <List dense={dense} {...slotProps?.list}>
+      <List dense={layoutState.dense} {...slotProps?.list}>
         {navList.items.map((item, index) => (
           <ListItem
             disablePadding
@@ -148,7 +171,7 @@ export function AdminLayout(props: AdminLayoutProps) {
   return (
     <Box sx={{ display: 'flex', ...sx }}>
       <AppBar
-        dense={dense}
+        dense={layoutState.dense}
         {...slotProps?.appBar}
         title={title}
         sidebarOpen={sidebarOpen}
@@ -156,8 +179,8 @@ export function AdminLayout(props: AdminLayoutProps) {
         collapsedDrawerWidth={collapsedDrawerWidth}
         onDrawerToggle={handleDrawerToggle}
         menuItems={menuItems}
-        initialState={initialState}
-        state={state}
+        state={layoutState?.appBarState}
+        onMenuOpenChange={handleMenuOpenChange}
       />
       <Box
         component='nav'
@@ -214,7 +237,7 @@ export function AdminLayout(props: AdminLayoutProps) {
           overflowX: 'hidden',
         }}
       >
-        <Toolbar variant={dense ? 'dense' : 'regular'} />
+        <Toolbar variant={layoutState.dense ? 'dense' : 'regular'} />
         {children}
       </Box>
     </Box>
