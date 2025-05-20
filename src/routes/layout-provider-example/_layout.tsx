@@ -3,7 +3,6 @@ import { AdminLayout } from '../../lib'
 
 import { navList } from '../../navList'
 import { MenuItem } from '@mui/material'
-import { useIsMobile } from '../../lib/hooks/useIsMobile'
 
 export const Route = createFileRoute('/layout-provider-example/_layout')({
   component: RouteComponent,

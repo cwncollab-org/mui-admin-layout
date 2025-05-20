@@ -1,7 +1,7 @@
 import { Box, FormControlLabel, Stack, Switch } from '@mui/material'
 import { createFileRoute } from '@tanstack/react-router'
-import { useAppBarStateValue } from '../../../lib/hooks/layoutHooks'
-import { useLayoutStateValue } from '../../../lib/hooks/layoutHooks'
+import { useAppBarStateValue } from '../../../lib'
+import { useLayoutStateValue } from '../../../lib'
 
 export const Route = createFileRoute('/layout-provider-example/_layout/')({
   component: RouteComponent,
