@@ -2,7 +2,8 @@ import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { AdminLayout } from '../../lib'
 
 import { navList } from '../../navList'
-import { MenuItem } from '@mui/material'
+import { Avatar, MenuItem } from '@mui/material'
+import Person from '@mui/icons-material/Person'
 
 export const Route = createFileRoute('/layout-provider-example/_layout')({
   component: RouteComponent,
@@ -16,6 +17,11 @@ function RouteComponent() {
         sidebarOpen: true,
       }}
       navList={navList}
+      avatar={
+        <Avatar sx={{ width: 32, height: 32 }}>
+          <Person />
+        </Avatar>
+      }
       menuItems={[
         [
           <MenuItem dense key='account'>

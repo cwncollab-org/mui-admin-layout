@@ -1,53 +1,68 @@
 import { PropsWithChildren } from 'react'
-import { Layout, LayoutInitialState } from './layout/Layout'
+import {
+  Layout as InternalLayout,
+  LayoutInitialState,
+  LayoutProps as InternalLayoutProps,
+} from './layout/Layout'
 
 import { LayoutProvider } from './provider/LayoutProvider'
 import { useLayoutState } from './hooks/layoutHooks'
-import { NavList } from './layout'
 import { useIsMobile } from './hooks/useIsMobile'
 
-type AdminLayoutProps = PropsWithChildren & {
-  title?: string | React.ReactNode
-  navList?: NavList | NavList[]
-  menuItems?: React.ReactNode[]
-  mobileMaxWidth?: number
-  initialState?: LayoutInitialState
-}
+type PickedInternalLayoutProps = Pick<
+  InternalLayoutProps,
+  | 'title'
+  | 'navList'
+  | 'menuItems'
+  | 'sx'
+  | 'drawerWidth'
+  | 'collapsedDrawerWidth'
+  | 'slotProps'
+>
+
+type AdminLayoutProps = PropsWithChildren &
+  PickedInternalLayoutProps & {
+    mobileMaxWidth?: number
+    initialState?: LayoutInitialState
+    avatar?: React.ReactNode
+  }
 
 export function AdminLayout(props: AdminLayoutProps) {
-  const { title, navList, menuItems, mobileMaxWidth, initialState, children } =
+  const { children, mobileMaxWidth, initialState, avatar, ...layoutProps } =
     props
+
+  const slotProps = {
+    ...layoutProps.slotProps,
+    appBar: {
+      ...layoutProps.slotProps?.appBar,
+      avatar,
+    },
+  }
 
   return (
     <LayoutProvider initialState={initialState} mobileMaxWidth={mobileMaxWidth}>
-      <Internal title={title} navList={navList} menuItems={menuItems}>
+      <Layout {...layoutProps} slotProps={slotProps}>
         {children}
-      </Internal>
+      </Layout>
     </LayoutProvider>
   )
 }
 
-type InternalProps = PropsWithChildren & {
-  title?: string | React.ReactNode
-  navList?: NavList | NavList[]
-  menuItems?: React.ReactNode[]
-}
+type LayoutProps = PropsWithChildren & PickedInternalLayoutProps
 
-function Internal(props: InternalProps) {
-  const { title, navList, menuItems, children } = props
+function Layout(props: LayoutProps) {
+  const { children, ...layoutProps } = props
   const { state, setState } = useLayoutState()
   const isMobile = useIsMobile()
 
   return (
-    <Layout
+    <InternalLayout
       dense={!isMobile}
-      title={title}
-      navList={navList}
-      menuItems={menuItems}
+      {...layoutProps}
       state={state}
       onStateChange={setState}
     >
       {children}
-    </Layout>
+    </InternalLayout>
   )
 }

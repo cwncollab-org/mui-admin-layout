@@ -1,6 +1,5 @@
 import { Avatar, IconButton, Menu } from '@mui/material'
 import { useLayoutEffect, useRef, useState } from 'react'
-import { Person as PersonIcon } from '@mui/icons-material'
 
 export type AppBarMenuState = {
   menuOpen: boolean
@@ -14,10 +13,11 @@ export type AppBarMenuProps = {
   initialState?: AppBarMenuInitialState
   state?: AppBarMenuState
   onMenuOpenChange?: (open: boolean) => void
+  avatar?: React.ReactNode
 }
 
 export function AppBarMenu(props: AppBarMenuProps) {
-  const { menuItems, initialState, state, onMenuOpenChange, dense } = props
+  const { menuItems, initialState, state, onMenuOpenChange, avatar } = props
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [_menuOpen, setMenuOpen] = useState(initialState?.menuOpen ?? false)
 
@@ -50,9 +50,11 @@ export function AppBarMenu(props: AppBarMenuProps) {
         aria-label='search'
         onClick={handleClick}
       >
-        <Avatar sx={{ width: avatarSize, height: avatarSize }}>
-          <PersonIcon fontSize={dense ? 'small' : 'medium'} />
-        </Avatar>
+        {avatar ? (
+          avatar
+        ) : (
+          <Avatar sx={{ width: avatarSize, height: avatarSize }}>A</Avatar>
+        )}
       </IconButton>
       {menuItems && (
         <Menu open={menuOpen} onClose={handleClose} anchorEl={anchorEl}>

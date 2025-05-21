@@ -51,10 +51,10 @@ export type LayoutProps = PropsWithChildren & {
     list?: ListProps
   }
   menuItems?: React.ReactNode[]
+  sx?: SxProps
   initialState?: LayoutInitialState
   state?: LayoutState
   onStateChange?: (state: LayoutState) => void
-  sx?: SxProps
 }
 
 export function Layout(props: LayoutProps) {

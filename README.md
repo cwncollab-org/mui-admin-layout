@@ -21,8 +21,8 @@ Here's a basic example of how to use the AdminLayout component:
 
 ```tsx
 import { AdminLayout } from '@cwncollab-org/mui-admin-layout'
-import { MenuItem, ThemeProvider, createTheme } from '@mui/material'
-import { Form } from '@mui/icons-material'
+import { MenuItem, ThemeProvider, createTheme, Avatar } from '@mui/material'
+import { Form, Person } from '@mui/icons-material'
 
 // Create a theme instance
 const theme = createTheme({
@@ -52,13 +52,20 @@ function App() {
       <AdminLayout
         title="My Admin App"
         navList={navList}
+        avatar={
+          <Avatar sx={{ width: 32, height: 32 }}>
+            <Person />
+          </Avatar>
+        }
         menuItems={[
-          <MenuItem dense key="account">
-            Account
-          </MenuItem>,
-          <MenuItem dense key="logout">
-            Logout
-          </MenuItem>,
+          [
+            <MenuItem dense key="account">
+              Account
+            </MenuItem>,
+            <MenuItem dense key="logout">
+              Logout
+            </MenuItem>,
+          ],
         ]}
         mobileMaxWidth={600}
         initialState={{
