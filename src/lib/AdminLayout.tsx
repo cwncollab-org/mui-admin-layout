@@ -1,5 +1,5 @@
-import { PropsWithChildren, useEffect } from 'react'
-import { Layout, LayoutInitialState, LayoutState } from './layout/Layout'
+import { PropsWithChildren } from 'react'
+import { Layout, LayoutInitialState } from './layout/Layout'
 
 import { LayoutProvider } from './provider/LayoutProvider'
 import { useLayoutState } from './hooks/layoutHooks'

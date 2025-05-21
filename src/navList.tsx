@@ -6,12 +6,12 @@ export const navList: NavList = {
     {
       icon: <Form />,
       label: 'Layout Provider Example',
-      url: '/layout-provider-example',
+      path: '/layout-provider-example',
     },
     {
       icon: <Form />,
       label: 'Not Found',
-      url: '/not-found',
+      path: '/not-found',
     },
   ],
 }

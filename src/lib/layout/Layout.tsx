@@ -149,8 +149,8 @@ export function Layout(props: LayoutProps) {
             sx={{ justifyContent: 'center' }}
           >
             <ListItemButton
-              component={item.url ? Link : 'div'}
-              to={item.url}
+              component={item.path ? Link : 'div'}
+              to={item.path}
               sx={{ justifyContent: 'center' }}
             >
               <ListItemIcon

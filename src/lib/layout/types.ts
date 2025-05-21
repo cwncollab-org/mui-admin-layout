@@ -8,5 +8,5 @@ export type NavList = {
 export type NavItem = {
   icon: React.ReactNode
   label: string
-  url?: ValidateToPath | (string & {})
+  path?: ValidateToPath | (string & {})
 }
