@@ -1,6 +1,5 @@
 import { Box, Button, Container, Typography } from '@mui/material'
 import { useNavigate } from '@tanstack/react-router'
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 
 const NotFound = () => {
   const navigate = useNavigate()
@@ -18,7 +17,6 @@ const NotFound = () => {
           gap: 3,
         }}
       >
-        <ErrorOutlineIcon sx={{ fontSize: 100, color: 'error.main' }} />
         <Typography variant='h1' component='h1' gutterBottom>
           404
         </Typography>
