@@ -1,4 +1,5 @@
 export { AdminLayout } from './AdminLayout'
+export { AdminLayoutProvider } from './AdminLayoutProvider'
 export {
   useAppBarStateValue,
   useIsMobile,
