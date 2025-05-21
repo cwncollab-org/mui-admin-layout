@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { AdminLayout } from '../../lib'
+import { AdminLayout, useAppBarStateValue } from '../../lib'
 
 import { navList } from '../../navList'
 import { Avatar, MenuItem } from '@mui/material'
@@ -10,12 +10,11 @@ export const Route = createFileRoute('/layout-provider-example/_layout')({
 })
 
 function RouteComponent() {
+  const { setValue: setMenuOpen } = useAppBarStateValue('menuOpen')
+
   return (
     <AdminLayout
       title='Layout Provider Example'
-      initialState={{
-        sidebarOpen: true,
-      }}
       navList={navList}
       avatar={
         <Avatar sx={{ width: 32, height: 32 }}>
@@ -24,10 +23,10 @@ function RouteComponent() {
       }
       menuItems={[
         [
-          <MenuItem dense key='account'>
+          <MenuItem dense key='account' onClick={() => setMenuOpen(false)}>
             Account
           </MenuItem>,
-          <MenuItem dense key='logout'>
+          <MenuItem dense key='logout' onClick={() => setMenuOpen(false)}>
             Logout
           </MenuItem>,
         ],

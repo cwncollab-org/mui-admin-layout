@@ -15,26 +15,21 @@ function RouteComponent() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Stack>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={menuOpen}
-              onChange={() => setMenuOpen(!menuOpen)}
-            />
-          }
-          label='Menu Open'
-        />
-        <FormControlLabel
-          control={
-            <Switch
-              checked={sidebarOpen}
-              onChange={() => setSidebarOpen(!sidebarOpen)}
-            />
-          }
-          label='Sidebar Open'
-        />
-      </Stack>
+      <FormControlLabel
+        control={
+          <Switch checked={menuOpen} onChange={() => setMenuOpen(!menuOpen)} />
+        }
+        label='Menu Open'
+      />
+      <FormControlLabel
+        control={
+          <Switch
+            checked={sidebarOpen}
+            onChange={() => setSidebarOpen(!sidebarOpen)}
+          />
+        }
+        label='Sidebar Open'
+      />
     </Box>
   )
 }
