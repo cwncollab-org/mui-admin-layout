@@ -47,7 +47,18 @@ export const navList = {
   ],
 }
 
-// Create a separate layout component
+function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AdminLayoutProvider mobileMaxWidth={600}>
+        <MainLayout />
+      </AdminLayoutProvider>
+    </ThemeProvider>
+  )
+}
+
+// Create a separate layout component to control menu open state
 function MainLayout() {
   const { setValue: setMenuOpen } = useAppBarStateValue('menuOpen')
 
@@ -85,16 +96,7 @@ function MainLayout() {
   )
 }
 
-function App() {
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <AdminLayoutProvider mobileMaxWidth={600}>
-        <MainLayout />
-      </AdminLayoutProvider>
-    </ThemeProvider>
-  )
-}
+
 ```
 
 ### Using Layout State
