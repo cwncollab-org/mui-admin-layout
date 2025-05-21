@@ -20,9 +20,11 @@ pnpm add @cwncollab-org/mui-admin-layout
 Here's a basic example of how to use the AdminLayout component:
 
 ```tsx
-import { AdminLayout } from '@cwncollab-org/mui-admin-layout'
-import { MenuItem, ThemeProvider, createTheme, Avatar } from '@mui/material'
+import { AdminLayout, AdminLayoutProvider } from '@cwncollab-org/mui-admin-layout'
+import { MenuItem, ThemeProvider, createTheme, Avatar, CssBaseline } from '@mui/material'
 import { Form, Person } from '@mui/icons-material'
+import { Outlet } from '@tanstack/react-router'
+import { useAppBarStateValue } from '@cwncollab-org/mui-admin-layout'
 
 // Create a theme instance
 const theme = createTheme({
@@ -45,36 +47,51 @@ export const navList = {
   ],
 }
 
+// Create a separate layout component
+function MainLayout() {
+  const { setValue: setMenuOpen } = useAppBarStateValue('menuOpen')
+
+  return (
+    <AdminLayout
+      title="My Admin App"
+      navList={navList}
+      avatar={
+        <Avatar sx={{ width: 32, height: 32 }}>
+          <Person />
+        </Avatar>
+      }
+      menuItems={[
+        [
+          <MenuItem 
+            dense 
+            key="account" 
+            onClick={() => setMenuOpen(false)}
+          >
+            Account
+          </MenuItem>,
+          <MenuItem 
+            dense 
+            key="logout" 
+            onClick={() => setMenuOpen(false)}
+          >
+            Logout
+          </MenuItem>,
+        ],
+      ]}
+    >
+      {/* Your page content goes here */}
+      <Outlet />
+    </AdminLayout>
+  )
+}
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AdminLayout
-        title="My Admin App"
-        navList={navList}
-        avatar={
-          <Avatar sx={{ width: 32, height: 32 }}>
-            <Person />
-          </Avatar>
-        }
-        menuItems={[
-          [
-            <MenuItem dense key="account">
-              Account
-            </MenuItem>,
-            <MenuItem dense key="logout">
-              Logout
-            </MenuItem>,
-          ],
-        ]}
-        mobileMaxWidth={600}
-        initialState={{
-          sidebarOpen: true,
-        }}
-      >
-        {/* Your page content goes here */}
-        <Outlet />
-      </AdminLayout>
+      <AdminLayoutProvider mobileMaxWidth={600}>
+        <MainLayout />
+      </AdminLayoutProvider>
     </ThemeProvider>
   )
 }
