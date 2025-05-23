@@ -1,5 +1,6 @@
 import {
   Box,
+  BoxProps,
   Drawer,
   IconButton,
   List,
@@ -49,6 +50,7 @@ export type LayoutProps = PropsWithChildren & {
       | 'onDrawerToggle'
     >
     list?: ListProps
+    main?: BoxProps
   }
   menuItems?: React.ReactNode[]
   sx?: SxProps
@@ -184,7 +186,7 @@ export function Layout(props: LayoutProps) {
   }, [handleSidebarToggle, navLists])
 
   return (
-    <Box sx={{ display: 'flex', ...sx }}>
+    <Box sx={{ display: 'flex', height: '100vh', ...sx }}>
       <AppBar
         dense={dense}
         {...slotProps?.appBar}
@@ -238,8 +240,9 @@ export function Layout(props: LayoutProps) {
         </Drawer>
       </Box>
       <Box
-        component='main'
         sx={{
+          display: 'flex',
+          flexDirection: 'column',
           flexGrow: 1,
           p: 0,
           width: {
@@ -252,8 +255,10 @@ export function Layout(props: LayoutProps) {
           overflowX: 'hidden',
         }}
       >
-        <Toolbar variant={dense ? 'dense' : 'regular'} />
-        {children}
+        <Toolbar variant={dense ? 'dense' : 'regular'} sx={{ flexShrink: 0 }} />
+        <Box component='main' sx={{ flexGrow: 1, ...slotProps?.main }}>
+          {children}
+        </Box>
       </Box>
     </Box>
   )
