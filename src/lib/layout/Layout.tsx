@@ -140,7 +140,9 @@ export function Layout(props: LayoutProps) {
           {navLists.map((list, index) => (
             <>
               {renderNavList(index, expanded, list)}
-              {index < navLists.length - 1 && <Divider />}
+              {index < navLists.length - 1 && (
+                <Divider key={`divider-${index}`} />
+              )}
             </>
           ))}
         </div>
@@ -153,7 +155,11 @@ export function Layout(props: LayoutProps) {
       navList: NavList
     ) => (
       <List key={key} dense={dense} {...slotProps?.list}>
-        {navList.title && <ListSubheader>{navList.title}</ListSubheader>}
+        {navList.title && (
+          <ListSubheader key={`subheader-${key}`}>
+            {navList.title}
+          </ListSubheader>
+        )}
         {navList.items.map((item, index) => (
           <ListItem
             disablePadding
