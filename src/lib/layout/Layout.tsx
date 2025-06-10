@@ -14,7 +14,7 @@ import {
   SxProps,
   Toolbar,
 } from '@mui/material'
-import { useMemo, PropsWithChildren } from 'react'
+import { useMemo, PropsWithChildren, Fragment } from 'react'
 import { ChevronRight } from '@mui/icons-material'
 import { useState } from 'react'
 import { ChevronLeft } from '@mui/icons-material'
@@ -138,28 +138,18 @@ export function Layout(props: LayoutProps) {
             </IconButton>
           </Toolbar>
           {navLists.map((list, index) => (
-            <>
-              {renderNavList(index, expanded, list)}
-              {index < navLists.length - 1 && (
-                <Divider key={`divider-${index}`} />
-              )}
-            </>
+            <Fragment key={`nav-list-${index}`}>
+              {renderNavList(expanded, list)}
+              {index < navLists.length - 1 && <Divider />}
+            </Fragment>
           ))}
         </div>
       )
     }
 
-    const renderNavList = (
-      key: React.Key,
-      expanded: boolean,
-      navList: NavList
-    ) => (
-      <List key={key} dense={dense} {...slotProps?.list}>
-        {navList.title && (
-          <ListSubheader key={`subheader-${key}`}>
-            {navList.title}
-          </ListSubheader>
-        )}
+    const renderNavList = (expanded: boolean, navList: NavList) => (
+      <List dense={dense} {...slotProps?.list}>
+        {navList.title && <ListSubheader>{navList.title}</ListSubheader>}
         {navList.items.map((item, index) => (
           <ListItem
             disablePadding
