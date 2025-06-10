@@ -1,6 +1,7 @@
 import {
   Box,
   BoxProps,
+  Divider,
   Drawer,
   IconButton,
   List,
@@ -9,6 +10,7 @@ import {
   ListItemIcon,
   ListItemText,
   ListProps,
+  ListSubheader,
   SxProps,
   Toolbar,
 } from '@mui/material'
@@ -136,14 +138,22 @@ export function Layout(props: LayoutProps) {
             </IconButton>
           </Toolbar>
           {navLists.map((list, index) => (
-            <Fragment key={index}>{renderNavList(expanded, list)}</Fragment>
+            <>
+              {renderNavList(index, expanded, list)}
+              {index < navLists.length - 1 && <Divider />}
+            </>
           ))}
         </div>
       )
     }
 
-    const renderNavList = (expanded: boolean, navList: NavList) => (
-      <List dense={dense} {...slotProps?.list}>
+    const renderNavList = (
+      key: React.Key,
+      expanded: boolean,
+      navList: NavList
+    ) => (
+      <List key={key} dense={dense} {...slotProps?.list}>
+        {navList.title && <ListSubheader>{navList.title}</ListSubheader>}
         {navList.items.map((item, index) => (
           <ListItem
             disablePadding

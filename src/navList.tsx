@@ -15,3 +15,36 @@ export const navList: NavList = {
     },
   ],
 }
+
+export const grouppedNavList: NavList[] = [
+  {
+    title: 'Group1',
+    items: [
+      {
+        icon: <Form />,
+        label: 'Layout Provider Example',
+        path: '/layout-provider-example',
+      },
+      {
+        icon: <Form />,
+        label: 'Not Found',
+        path: '/not-found',
+      },
+    ],
+  },
+  {
+    title: 'Group2',
+    items: [
+      {
+        icon: <Form />,
+        label: 'Not Found',
+        path: '/not-found',
+      },
+      {
+        icon: <Form />,
+        label: 'Not Found',
+        path: '/not-found',
+      },
+    ],
+  },
+]
