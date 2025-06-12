@@ -1,7 +1,7 @@
 import { Box, Button, Container, Typography } from '@mui/material'
 import { useNavigate } from '@tanstack/react-router'
 
-const NotFound = () => {
+export function NotFoundPage() {
   const navigate = useNavigate()
 
   return (
@@ -40,4 +40,4 @@ const NotFound = () => {
   )
 }
 
-export default NotFound
+export default NotFoundPage

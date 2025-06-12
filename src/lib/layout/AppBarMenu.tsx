@@ -29,7 +29,7 @@ export function AppBarMenu(props: AppBarMenuProps) {
     if (buttonRef.current) {
       setAnchorEl(buttonRef.current)
     }
-  }, [buttonRef.current])
+  }, [])
 
   const handleClick = () => {
     setMenuOpen(true)

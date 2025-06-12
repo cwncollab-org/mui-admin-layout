@@ -14,7 +14,7 @@ import {
   SxProps,
   Toolbar,
 } from '@mui/material'
-import { useMemo, PropsWithChildren, Fragment } from 'react'
+import { useMemo, PropsWithChildren, Fragment, useCallback } from 'react'
 import { ChevronRight } from '@mui/icons-material'
 import { useState } from 'react'
 import { ChevronLeft } from '@mui/icons-material'
@@ -103,17 +103,20 @@ export function Layout(props: LayoutProps) {
     setMobileOpen(!mobileOpen)
   }
 
-  const handleSidebarToggle = () => {
+  const handleStateChange = useCallback(
+    (state: LayoutState) => {
+      onStateChange?.(state)
+      setLayoutState(state)
+    },
+    [onStateChange, setLayoutState]
+  )
+
+  const handleSidebarToggle = useCallback(() => {
     handleStateChange({
       ...layoutState,
       sidebarOpen: !layoutState.sidebarOpen,
     })
-  }
-
-  const handleStateChange = (state: LayoutState) => {
-    onStateChange?.(state)
-    setLayoutState(state)
-  }
+  }, [layoutState, handleStateChange])
 
   const handleMenuOpenChange = (open: boolean) => {
     handleStateChange({
@@ -189,7 +192,7 @@ export function Layout(props: LayoutProps) {
       expanded: renderNavSidebar(true),
       collapsed: renderNavSidebar(false),
     }
-  }, [handleSidebarToggle, navLists])
+  }, [handleSidebarToggle, navLists, dense, slotProps?.list])
 
   return (
     <Box sx={{ display: 'flex', height: '100vh', ...sx }}>
