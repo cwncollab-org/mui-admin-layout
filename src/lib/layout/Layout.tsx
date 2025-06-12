@@ -13,6 +13,7 @@ import {
   ListSubheader,
   SxProps,
   Toolbar,
+  Tooltip,
 } from '@mui/material'
 import { useMemo, PropsWithChildren, Fragment, useCallback } from 'react'
 import { ChevronRight } from '@mui/icons-material'
@@ -152,37 +153,51 @@ export function Layout(props: LayoutProps) {
 
     const renderNavList = (expanded: boolean, navList: NavList) => (
       <List dense={dense} {...slotProps?.list}>
-        {navList.title && <ListSubheader>{navList.title}</ListSubheader>}
+        {navList.title && expanded && (
+          <ListSubheader>{navList.title}</ListSubheader>
+        )}
         {navList.items.map((item, index) => (
           <ListItem
             disablePadding
             key={index}
             sx={{ justifyContent: 'center' }}
           >
-            <ListItemButton
-              component={item.path ? Link : 'div'}
-              to={item.path}
-              sx={{ justifyContent: 'center' }}
+            <Tooltip
+              title={expanded ? '' : item.label}
+              placement='right'
+              slotProps={{
+                popper: {
+                  modifiers: [
+                    { name: 'offset', options: { offset: [0, -12] } },
+                  ],
+                },
+              }}
             >
-              <ListItemIcon
-                sx={{
-                  minWidth: '24px',
-                }}
+              <ListItemButton
+                component={item.path ? Link : 'div'}
+                to={item.path}
+                sx={{ justifyContent: 'center' }}
               >
-                {item.icon}
-              </ListItemIcon>
-              {expanded && (
-                <ListItemText
-                  primary={item.label}
+                <ListItemIcon
                   sx={{
-                    ml: '1rem',
-                    textOverflow: 'clip',
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
+                    minWidth: '24px',
                   }}
-                />
-              )}
-            </ListItemButton>
+                >
+                  {item.icon}
+                </ListItemIcon>
+                {expanded && (
+                  <ListItemText
+                    primary={item.label}
+                    sx={{
+                      ml: '1rem',
+                      textOverflow: 'clip',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                    }}
+                  />
+                )}
+              </ListItemButton>
+            </Tooltip>
           </ListItem>
         ))}
       </List>
