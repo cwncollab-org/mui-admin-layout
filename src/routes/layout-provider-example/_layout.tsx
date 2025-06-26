@@ -24,6 +24,9 @@ function RouteComponent() {
           <Person />
         </Avatar>
       }
+      slotProps={{
+        main: {},
+      }}
       menuItems={[
         [
           <MenuItem dense key='account' onClick={() => setMenuOpen(false)}>

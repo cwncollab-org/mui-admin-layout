@@ -154,7 +154,9 @@ export function Layout(props: LayoutProps) {
     const renderNavList = (expanded: boolean, navList: NavList) => (
       <List dense={dense} {...slotProps?.list}>
         {navList.title && expanded && (
-          <ListSubheader>{navList.title}</ListSubheader>
+          <ListSubheader sx={{ lineHeight: dense ? '35px' : undefined }}>
+            {navList.title}
+          </ListSubheader>
         )}
         {navList.items.map((item, index) => (
           <ListItem
@@ -208,6 +210,9 @@ export function Layout(props: LayoutProps) {
       collapsed: renderNavSidebar(false),
     }
   }, [handleSidebarToggle, navLists, dense, slotProps?.list])
+
+  const mainProps = slotProps?.main
+  const { sx: mainSx, ...mainRest } = mainProps ?? {}
 
   return (
     <Box sx={{ display: 'flex', height: '100vh', ...sx }}>
@@ -280,7 +285,7 @@ export function Layout(props: LayoutProps) {
         }}
       >
         <Toolbar variant={dense ? 'dense' : 'regular'} sx={{ flexShrink: 0 }} />
-        <Box component='main' sx={{ flexGrow: 1, ...slotProps?.main }}>
+        <Box component='main' {...mainRest} sx={{ flexGrow: 1, ...mainSx }}>
           {children}
         </Box>
       </Box>
