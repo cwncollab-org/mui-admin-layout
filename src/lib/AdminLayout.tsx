@@ -37,9 +37,9 @@ export function AdminLayout(props: AdminLayoutProps) {
 
   return (
     <InternalLayout
+      {...layoutProps}
       dense={!isMobile}
       slotProps={slotProps}
-      {...layoutProps}
       state={state}
       onStateChange={setState}
     >

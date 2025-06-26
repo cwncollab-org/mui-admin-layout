@@ -211,6 +211,8 @@ export function Layout(props: LayoutProps) {
     }
   }, [handleSidebarToggle, navLists, dense, slotProps?.list])
 
+  const appBarProps = slotProps?.appBar
+
   const mainProps = slotProps?.main
   const { sx: mainSx, ...mainRest } = mainProps ?? {}
 
@@ -218,7 +220,7 @@ export function Layout(props: LayoutProps) {
     <Box sx={{ display: 'flex', height: '100vh', ...sx }}>
       <AppBar
         dense={dense}
-        {...slotProps?.appBar}
+        {...appBarProps}
         title={title}
         sidebarOpen={sidebarOpen}
         drawerWidth={drawerWidth}

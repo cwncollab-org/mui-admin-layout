@@ -25,6 +25,7 @@ export type AppBarProps = {
   dense?: boolean
   onDrawerToggle: () => void
   onMenuOpenChange?: (open: boolean) => void
+  disableMenu?: boolean
   menu?: React.ReactNode
   menuItems?: React.ReactNode[]
   avatar?: React.ReactNode
@@ -42,6 +43,7 @@ export function AppBar(props: AppBarProps) {
     dense,
     onDrawerToggle,
     onMenuOpenChange,
+    disableMenu = false,
     menu,
     menuItems,
     avatar,
@@ -50,16 +52,18 @@ export function AppBar(props: AppBarProps) {
     sx,
   } = props
 
-  const renderedMenu = menu ?? (
-    <AppBarMenu
-      menuItems={menuItems}
-      initialState={initialState}
-      state={state}
-      dense={dense}
-      onMenuOpenChange={onMenuOpenChange}
-      avatar={avatar}
-    />
-  )
+  const renderedMenu = disableMenu
+    ? null
+    : (menu ?? (
+        <AppBarMenu
+          menuItems={menuItems}
+          initialState={initialState}
+          state={state}
+          dense={dense}
+          onMenuOpenChange={onMenuOpenChange}
+          avatar={avatar}
+        />
+      ))
 
   return (
     <MuiAppBar
