@@ -94,7 +94,7 @@ export function AppBar(props: AppBarProps) {
             {title}
           </Typography>
         ) : (
-          <Box sx={{ flexGrow: 1, width: 1 }}>{title}</Box>
+          <Box sx={{ flexGrow: 1, width: 1, overflowX: 'hidden' }}>{title}</Box>
         )}
         {renderedMenu && <Box>{renderedMenu}</Box>}
       </Toolbar>
