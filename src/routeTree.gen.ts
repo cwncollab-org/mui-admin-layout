@@ -17,6 +17,7 @@ import { Route as NotFoundImport } from './routes/not-found'
 import { Route as IndexImport } from './routes/index'
 import { Route as LayoutProviderExampleLayoutImport } from './routes/layout-provider-example/_layout'
 import { Route as LayoutProviderExampleLayoutIndexImport } from './routes/layout-provider-example/_layout/index'
+import { Route as LayoutProviderExampleLayoutLongPageImport } from './routes/layout-provider-example/_layout/long-page'
 
 // Create Virtual Routes
 
@@ -57,6 +58,13 @@ const LayoutProviderExampleLayoutIndexRoute =
     getParentRoute: () => LayoutProviderExampleLayoutRoute,
   } as any)
 
+const LayoutProviderExampleLayoutLongPageRoute =
+  LayoutProviderExampleLayoutLongPageImport.update({
+    id: '/long-page',
+    path: '/long-page',
+    getParentRoute: () => LayoutProviderExampleLayoutRoute,
+  } as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -89,6 +97,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProviderExampleLayoutImport
       parentRoute: typeof LayoutProviderExampleRoute
     }
+    '/layout-provider-example/_layout/long-page': {
+      id: '/layout-provider-example/_layout/long-page'
+      path: '/long-page'
+      fullPath: '/layout-provider-example/long-page'
+      preLoaderRoute: typeof LayoutProviderExampleLayoutLongPageImport
+      parentRoute: typeof LayoutProviderExampleLayoutImport
+    }
     '/layout-provider-example/_layout/': {
       id: '/layout-provider-example/_layout/'
       path: '/'
@@ -102,11 +117,14 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface LayoutProviderExampleLayoutRouteChildren {
+  LayoutProviderExampleLayoutLongPageRoute: typeof LayoutProviderExampleLayoutLongPageRoute
   LayoutProviderExampleLayoutIndexRoute: typeof LayoutProviderExampleLayoutIndexRoute
 }
 
 const LayoutProviderExampleLayoutRouteChildren: LayoutProviderExampleLayoutRouteChildren =
   {
+    LayoutProviderExampleLayoutLongPageRoute:
+      LayoutProviderExampleLayoutLongPageRoute,
     LayoutProviderExampleLayoutIndexRoute:
       LayoutProviderExampleLayoutIndexRoute,
   }
@@ -134,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/not-found': typeof NotFoundRoute
   '/layout-provider-example': typeof LayoutProviderExampleLayoutRouteWithChildren
+  '/layout-provider-example/long-page': typeof LayoutProviderExampleLayoutLongPageRoute
   '/layout-provider-example/': typeof LayoutProviderExampleLayoutIndexRoute
 }
 
@@ -141,6 +160,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/not-found': typeof NotFoundRoute
   '/layout-provider-example': typeof LayoutProviderExampleLayoutIndexRoute
+  '/layout-provider-example/long-page': typeof LayoutProviderExampleLayoutLongPageRoute
 }
 
 export interface FileRoutesById {
@@ -149,6 +169,7 @@ export interface FileRoutesById {
   '/not-found': typeof NotFoundRoute
   '/layout-provider-example': typeof LayoutProviderExampleRouteWithChildren
   '/layout-provider-example/_layout': typeof LayoutProviderExampleLayoutRouteWithChildren
+  '/layout-provider-example/_layout/long-page': typeof LayoutProviderExampleLayoutLongPageRoute
   '/layout-provider-example/_layout/': typeof LayoutProviderExampleLayoutIndexRoute
 }
 
@@ -158,15 +179,21 @@ export interface FileRouteTypes {
     | '/'
     | '/not-found'
     | '/layout-provider-example'
+    | '/layout-provider-example/long-page'
     | '/layout-provider-example/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/not-found' | '/layout-provider-example'
+  to:
+    | '/'
+    | '/not-found'
+    | '/layout-provider-example'
+    | '/layout-provider-example/long-page'
   id:
     | '__root__'
     | '/'
     | '/not-found'
     | '/layout-provider-example'
     | '/layout-provider-example/_layout'
+    | '/layout-provider-example/_layout/long-page'
     | '/layout-provider-example/_layout/'
   fileRoutesById: FileRoutesById
 }
@@ -214,8 +241,13 @@ export const routeTree = rootRoute
       "filePath": "layout-provider-example/_layout.tsx",
       "parent": "/layout-provider-example",
       "children": [
+        "/layout-provider-example/_layout/long-page",
         "/layout-provider-example/_layout/"
       ]
+    },
+    "/layout-provider-example/_layout/long-page": {
+      "filePath": "layout-provider-example/_layout/long-page.tsx",
+      "parent": "/layout-provider-example/_layout"
     },
     "/layout-provider-example/_layout/": {
       "filePath": "layout-provider-example/_layout/index.tsx",

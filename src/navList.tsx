@@ -27,8 +27,8 @@ export const grouppedNavList: NavList[] = [
       },
       {
         icon: <Form />,
-        label: 'Not Found',
-        path: '/not-found',
+        label: 'Long Page',
+        path: '/layout-provider-example/long-page',
       },
     ],
   },
