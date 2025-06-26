@@ -281,13 +281,12 @@ export function Layout(props: LayoutProps) {
               sidebarOpen ? drawerWidth : collapsedDrawerWidth
             }px)`,
           },
-
           transition: 'width 0.2s',
           overflowX: 'hidden',
         }}
       >
         <Toolbar variant={dense ? 'dense' : 'regular'} sx={{ flexShrink: 0 }} />
-        <Box component='main' {...mainRest} sx={{ flexGrow: 1, ...mainSx }}>
+        <Box component='main' {...mainRest} sx={{ flexGrow: 1, overflowY: 'auto', ...mainSx }}>
           {children}
         </Box>
       </Box>
