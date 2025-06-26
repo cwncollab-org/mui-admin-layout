@@ -47,4 +47,19 @@ export const grouppedNavList: NavList[] = [
       },
     ],
   },
+  {
+    title: 'Group3',
+    items: [
+      {
+        icon: <Form />,
+        label: 'Not Found',
+        path: '/not-found',
+      },
+      {
+        icon: <Form />,
+        label: 'Not Found',
+        path: '/not-found',
+      },
+    ],
+  },
 ]
