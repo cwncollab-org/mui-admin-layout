@@ -17,7 +17,7 @@ function RouteComponent() {
 
   return (
     <AdminLayout
-      title='Layout Provider Example'
+      title='Layout Provider Example Lorem Ipsum Dolor Sit Amet Consectetur Adipiscing Elit'
       navList={selectedNavList}
       avatar={
         <Avatar sx={{ width: 32, height: 32 }}>
