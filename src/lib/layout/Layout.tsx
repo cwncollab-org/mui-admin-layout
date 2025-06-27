@@ -178,6 +178,7 @@ export function Layout(props: LayoutProps) {
               <ListItemButton
                 component={item.path ? Link : 'div'}
                 to={item.path}
+                onClick={item.onClick}
                 sx={{ justifyContent: 'center' }}
               >
                 <ListItemIcon
@@ -286,7 +287,11 @@ export function Layout(props: LayoutProps) {
         }}
       >
         <Toolbar variant={dense ? 'dense' : 'regular'} sx={{ flexShrink: 0 }} />
-        <Box component='main' {...mainRest} sx={{ flexGrow: 1, overflowY: 'auto', ...mainSx }}>
+        <Box
+          component='main'
+          {...mainRest}
+          sx={{ flexGrow: 1, overflowY: 'auto', ...mainSx }}
+        >
           {children}
         </Box>
       </Box>
