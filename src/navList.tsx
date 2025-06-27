@@ -62,4 +62,16 @@ export const grouppedNavList: NavList[] = [
       },
     ],
   },
+  {
+    title: 'Group4',
+    items: [
+      {
+        icon: <Form />,
+        label: 'Logout',
+        onClick: () => {
+          console.log('Logout clicked')
+        },
+      },
+    ],
+  },
 ]
