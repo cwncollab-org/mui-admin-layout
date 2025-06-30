@@ -247,25 +247,33 @@ export function Layout(props: LayoutProps) {
           ModalProps={{
             keepMounted: true,
           }}
+          slotProps={{
+            paper: {
+              sx: {
+                boxSizing: 'border-box',
+                width: drawerWidth,
+              },
+            },
+          }}
           sx={{
             display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-              width: drawerWidth,
-            },
           }}
         >
           {drawerContent.expanded}
         </Drawer>
         <Drawer
           variant='permanent'
+          slotProps={{
+            paper: {
+              sx: {
+                boxSizing: 'border-box',
+                width: sidebarOpen ? drawerWidth : collapsedDrawerWidth,
+                transition: 'width 0.2s',
+              },
+            },
+          }}
           sx={{
             display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-              width: sidebarOpen ? drawerWidth : collapsedDrawerWidth,
-              transition: 'width 0.2s',
-            },
           }}
           open={sidebarOpen}
         >
