@@ -12,10 +12,16 @@ type PickedInternalLayoutProps = Pick<
   | 'title'
   | 'navList'
   | 'menuItems'
+  | 'appBarProps'
+  | 'mainProps'
+  | 'drawerProps'
+  | 'listProps'
+  | 'listItemProps'
+  | 'listSubheaderProps'
+  | 'listItemButtonProps'
   | 'sx'
   | 'drawerWidth'
   | 'collapsedDrawerWidth'
-  | 'slotProps'
   | 'enableAppBar'
 >
 
@@ -28,19 +34,11 @@ export function AdminLayout(props: AdminLayoutProps) {
   const { children, avatar, ...layoutProps } = props
   const { state, setState } = useLayoutState()
   const isMobile = useIsMobile()
-  const slotProps = {
-    ...layoutProps.slotProps,
-    appBar: {
-      ...layoutProps.slotProps?.appBar,
-      avatar,
-    },
-  }
 
   return (
     <InternalLayout
       {...layoutProps}
       dense={!isMobile}
-      slotProps={slotProps}
       state={state}
       onStateChange={setState}
     >

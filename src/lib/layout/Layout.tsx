@@ -2,15 +2,20 @@ import {
   Box,
   BoxProps,
   Divider,
+  DividerProps,
   Drawer,
+  DrawerProps,
   IconButton,
   List,
   ListItem,
   ListItemButtonProps,
   ListItemIcon,
+  ListItemProps,
   ListItemText,
   ListProps,
   ListSubheader,
+  ListSubheaderProps,
+  PaperProps,
   SxProps,
   Toolbar,
   Tooltip,
@@ -42,22 +47,24 @@ export type LayoutProps = PropsWithChildren & {
   dense?: boolean
   drawerWidth?: number
   collapsedDrawerWidth?: number
-  slotProps?: {
-    appBar?: Omit<
-      AppBarProps,
-      | 'title'
-      | 'status'
-      | 'sidebarOpen'
-      | 'drawerWidth'
-      | 'collapsedDrawerWidth'
-      | 'onDrawerToggle'
-    >
-    list?: ListProps
-    main?: BoxProps
-    link?: ListItemButtonProps
-  }
   enableAppBar?: boolean
   menuItems?: React.ReactNode[]
+  appBarProps?: Omit<
+    AppBarProps,
+    | 'title'
+    | 'status'
+    | 'sidebarOpen'
+    | 'drawerWidth'
+    | 'collapsedDrawerWidth'
+    | 'onDrawerToggle'
+  >
+  mainProps?: BoxProps
+  drawerProps?: Omit<DrawerProps, 'variant' | 'open' | 'onClose'>
+  listProps?: ListProps
+  listItemProps?: ListItemProps
+  listSubheaderProps?: ListSubheaderProps
+  listItemButtonProps?: Omit<ListItemButtonProps, 'to' | 'onClick'>
+  dividerProps?: Omit<DividerProps, 'orientation' | 'flexItem'>
   sx?: SxProps
   initialState?: LayoutInitialState
   state?: LayoutState
@@ -72,12 +79,19 @@ export function Layout(props: LayoutProps) {
     collapsedDrawerWidth = defaultCollapsedDrawerWidth,
     dense,
     children,
-    slotProps,
     enableAppBar = true,
     menuItems,
     initialState,
     state,
     onStateChange,
+    appBarProps,
+    mainProps,
+    drawerProps,
+    listProps,
+    listItemProps,
+    listSubheaderProps,
+    listItemButtonProps,
+    dividerProps,
     sx,
   } = props
 
@@ -144,7 +158,7 @@ export function Layout(props: LayoutProps) {
           {navLists.map((list, index) => (
             <Fragment key={`nav-list-${index}`}>
               {renderNavList(expanded, list)}
-              {index < navLists.length - 1 && <Divider />}
+              {index < navLists.length - 1 && <Divider {...dividerProps} />}
             </Fragment>
           ))}
         </div>
@@ -152,17 +166,18 @@ export function Layout(props: LayoutProps) {
     }
 
     const renderNavList = (expanded: boolean, navList: NavList) => {
-      const { list: listProps, link: linkProps } = slotProps ?? {}
-
       return (
         <List dense={dense} {...listProps}>
           {navList.title && expanded && (
-            <ListSubheader sx={{ lineHeight: dense ? '35px' : undefined }}>
+            <ListSubheader
+              sx={{ lineHeight: dense ? '35px' : undefined }}
+              {...listSubheaderProps}
+            >
               {navList.title}
             </ListSubheader>
           )}
           {navList.items.map((item, index) => (
-            <ListItem disablePadding key={index}>
+            <ListItem disablePadding key={index} {...listItemProps}>
               <Tooltip
                 title={expanded ? '' : item.label}
                 placement='right'
@@ -177,7 +192,7 @@ export function Layout(props: LayoutProps) {
                 <NavListItemButton
                   to={item.path}
                   onClick={item.onClick}
-                  sx={linkProps?.sx as SxProps}
+                  sx={listItemButtonProps?.sx as SxProps}
                 >
                   <ListItemIcon
                     sx={{
@@ -209,11 +224,8 @@ export function Layout(props: LayoutProps) {
       expanded: renderNavSidebar(true),
       collapsed: renderNavSidebar(false),
     }
-  }, [handleSidebarToggle, navLists, dense, slotProps?.list])
+  }, [handleSidebarToggle, navLists, dense, listProps, listItemButtonProps])
 
-  const appBarProps = slotProps?.appBar
-
-  const mainProps = slotProps?.main
   const { sx: mainSx, ...mainRest } = mainProps ?? {}
 
   return (
@@ -248,14 +260,18 @@ export function Layout(props: LayoutProps) {
             keepMounted: true,
           }}
           slotProps={{
+            ...drawerProps?.slotProps,
             paper: {
+              ...drawerProps?.slotProps?.paper,
               sx: {
+                ...(drawerProps?.slotProps?.paper as PaperProps)?.sx,
                 boxSizing: 'border-box',
                 width: drawerWidth,
               },
             },
           }}
           sx={{
+            ...drawerProps?.sx,
             display: { xs: 'block', sm: 'none' },
           }}
         >
@@ -264,8 +280,11 @@ export function Layout(props: LayoutProps) {
         <Drawer
           variant='permanent'
           slotProps={{
+            ...drawerProps?.slotProps,
             paper: {
+              ...drawerProps?.slotProps?.paper,
               sx: {
+                ...(drawerProps?.slotProps?.paper as PaperProps)?.sx,
                 boxSizing: 'border-box',
                 width: sidebarOpen ? drawerWidth : collapsedDrawerWidth,
                 transition: 'width 0.2s',
