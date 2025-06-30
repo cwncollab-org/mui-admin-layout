@@ -24,6 +24,7 @@ function RouteComponent() {
           <Person />
         </Avatar>
       }
+      enableAppBar={true}
       slotProps={{
         main: {},
         link: {

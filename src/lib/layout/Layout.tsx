@@ -56,6 +56,7 @@ export type LayoutProps = PropsWithChildren & {
     main?: BoxProps
     link?: ListItemButtonProps
   }
+  enableAppBar?: boolean
   menuItems?: React.ReactNode[]
   sx?: SxProps
   initialState?: LayoutInitialState
@@ -72,6 +73,7 @@ export function Layout(props: LayoutProps) {
     dense,
     children,
     slotProps,
+    enableAppBar = true,
     menuItems,
     initialState,
     state,
@@ -216,18 +218,20 @@ export function Layout(props: LayoutProps) {
 
   return (
     <Box sx={{ display: 'flex', height: '100vh', ...sx }}>
-      <AppBar
-        dense={dense}
-        {...appBarProps}
-        title={title}
-        sidebarOpen={sidebarOpen}
-        drawerWidth={drawerWidth}
-        collapsedDrawerWidth={collapsedDrawerWidth}
-        onDrawerToggle={handleDrawerToggle}
-        menuItems={menuItems}
-        state={layoutState?.appBarState}
-        onMenuOpenChange={handleMenuOpenChange}
-      />
+      {enableAppBar && (
+        <AppBar
+          dense={dense}
+          {...appBarProps}
+          title={title}
+          sidebarOpen={sidebarOpen}
+          drawerWidth={drawerWidth}
+          collapsedDrawerWidth={collapsedDrawerWidth}
+          onDrawerToggle={handleDrawerToggle}
+          menuItems={menuItems}
+          state={layoutState?.appBarState}
+          onMenuOpenChange={handleMenuOpenChange}
+        />
+      )}
       <Box
         component='nav'
         sx={{
@@ -283,7 +287,12 @@ export function Layout(props: LayoutProps) {
           overflowX: 'hidden',
         }}
       >
-        <Toolbar variant={dense ? 'dense' : 'regular'} sx={{ flexShrink: 0 }} />
+        {enableAppBar && (
+          <Toolbar
+            variant={dense ? 'dense' : 'regular'}
+            sx={{ flexShrink: 0 }}
+          />
+        )}
         <Box
           component='main'
           {...mainRest}

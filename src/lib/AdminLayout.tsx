@@ -16,6 +16,7 @@ type PickedInternalLayoutProps = Pick<
   | 'drawerWidth'
   | 'collapsedDrawerWidth'
   | 'slotProps'
+  | 'enableAppBar'
 >
 
 export type AdminLayoutProps = PropsWithChildren &
