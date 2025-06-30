@@ -23,7 +23,7 @@ export const grouppedNavList: NavList[] = [
       {
         icon: <Form />,
         label: 'Layout Provider Example',
-        path: '/layout-provider-example',
+        path: '/layout-provider-example/control',
       },
       {
         icon: <Form />,

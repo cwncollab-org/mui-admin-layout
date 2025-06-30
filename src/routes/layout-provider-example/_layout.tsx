@@ -26,6 +26,13 @@ function RouteComponent() {
       }
       slotProps={{
         main: {},
+        link: {
+          sx: {
+            '&.active': {
+              bgcolor: t => t.palette.grey[200],
+            },
+          },
+        },
       }}
       menuItems={[
         [
