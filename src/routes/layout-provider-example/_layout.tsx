@@ -25,13 +25,20 @@ function RouteComponent() {
         </Avatar>
       }
       enableAppBar={true}
-      slotProps={{
-        main: {},
-        link: {
-          sx: {
-            '&.active': {
-              bgcolor: t => t.palette.grey[200],
-            },
+      drawerProps={{
+        slotProps: {
+          paper: {
+            sx: {},
+          },
+        },
+      }}
+      listSubheaderProps={{
+        sx: { bgcolor: 'inherit' },
+      }}
+      listItemButtonProps={{
+        sx: {
+          '&.active': {
+            bgcolor: t => t.palette.grey[200],
           },
         },
       }}
