@@ -6,7 +6,7 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemButton,
+  ListItemButtonProps,
   ListItemIcon,
   ListItemText,
   ListProps,
@@ -19,9 +19,9 @@ import { useMemo, PropsWithChildren, Fragment, useCallback } from 'react'
 import { ChevronRight } from '@mui/icons-material'
 import { useState } from 'react'
 import { ChevronLeft } from '@mui/icons-material'
-import { Link } from '@tanstack/react-router'
 import { AppBar, AppBarInitialState, AppBarProps, AppBarState } from './AppBar'
 import { NavList } from './types'
+import { NavListItemButton } from './NavListItemButton'
 
 const defaultDrawerWidth = 240
 const defaultCollapsedDrawerWidth = 64
@@ -54,6 +54,7 @@ export type LayoutProps = PropsWithChildren & {
     >
     list?: ListProps
     main?: BoxProps
+    link?: ListItemButtonProps
   }
   menuItems?: React.ReactNode[]
   sx?: SxProps
@@ -95,10 +96,7 @@ export function Layout(props: LayoutProps) {
   const layoutState = state ?? _layoutState
   const sidebarOpen = Boolean(layoutState.sidebarOpen)
 
-  const navLists = useMemo(
-    () => (Array.isArray(navList) ? navList : [navList]),
-    [navList]
-  )
+  const navLists = Array.isArray(navList) ? navList : [navList]
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
@@ -151,60 +149,59 @@ export function Layout(props: LayoutProps) {
       )
     }
 
-    const renderNavList = (expanded: boolean, navList: NavList) => (
-      <List dense={dense} {...slotProps?.list}>
-        {navList.title && expanded && (
-          <ListSubheader sx={{ lineHeight: dense ? '35px' : undefined }}>
-            {navList.title}
-          </ListSubheader>
-        )}
-        {navList.items.map((item, index) => (
-          <ListItem
-            disablePadding
-            key={index}
-            sx={{ justifyContent: 'center' }}
-          >
-            <Tooltip
-              title={expanded ? '' : item.label}
-              placement='right'
-              slotProps={{
-                popper: {
-                  modifiers: [
-                    { name: 'offset', options: { offset: [0, -12] } },
-                  ],
-                },
-              }}
-            >
-              <ListItemButton
-                component={item.path ? Link : 'div'}
-                to={item.path}
-                onClick={item.onClick}
-                sx={{ justifyContent: 'center' }}
+    const renderNavList = (expanded: boolean, navList: NavList) => {
+      const { list: listProps, link: linkProps } = slotProps ?? {}
+
+      return (
+        <List dense={dense} {...listProps}>
+          {navList.title && expanded && (
+            <ListSubheader sx={{ lineHeight: dense ? '35px' : undefined }}>
+              {navList.title}
+            </ListSubheader>
+          )}
+          {navList.items.map((item, index) => (
+            <ListItem disablePadding key={index}>
+              <Tooltip
+                title={expanded ? '' : item.label}
+                placement='right'
+                slotProps={{
+                  popper: {
+                    modifiers: [
+                      { name: 'offset', options: { offset: [0, -12] } },
+                    ],
+                  },
+                }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: '24px',
-                  }}
+                <NavListItemButton
+                  to={item.path}
+                  onClick={item.onClick}
+                  sx={linkProps?.sx as SxProps}
                 >
-                  {item.icon}
-                </ListItemIcon>
-                {expanded && (
-                  <ListItemText
-                    primary={item.label}
+                  <ListItemIcon
                     sx={{
-                      ml: '1rem',
-                      textOverflow: 'clip',
-                      overflow: 'hidden',
-                      whiteSpace: 'nowrap',
+                      minWidth: '24px',
                     }}
-                  />
-                )}
-              </ListItemButton>
-            </Tooltip>
-          </ListItem>
-        ))}
-      </List>
-    )
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  {expanded && (
+                    <ListItemText
+                      primary={item.label}
+                      sx={{
+                        ml: '1rem',
+                        textOverflow: 'clip',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                      }}
+                    />
+                  )}
+                </NavListItemButton>
+              </Tooltip>
+            </ListItem>
+          ))}
+        </List>
+      )
+    }
 
     return {
       expanded: renderNavSidebar(true),
