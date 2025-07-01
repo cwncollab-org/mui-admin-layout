@@ -12,13 +12,20 @@ type PickedInternalLayoutProps = Pick<
   | 'title'
   | 'navList'
   | 'menuItems'
+  | 'sidebarTogglePosition'
+  | 'navStartSlot'
+  | 'navEndSlot'
   | 'appBarProps'
   | 'mainProps'
-  | 'drawerProps'
-  | 'listProps'
-  | 'listItemProps'
-  | 'listSubheaderProps'
-  | 'listItemButtonProps'
+  | 'navDrawerProps'
+  | 'navListProps'
+  | 'navListItemProps'
+  | 'navListSubheaderProps'
+  | 'navListItemButtonProps'
+  | 'navDividerProps'
+  | 'navListItemIconProps'
+  | 'navListItemTextProps'
+  | 'navSidebarToggleButtonProps'
   | 'sx'
   | 'drawerWidth'
   | 'collapsedDrawerWidth'
@@ -28,17 +35,18 @@ type PickedInternalLayoutProps = Pick<
 export type AdminLayoutProps = PropsWithChildren &
   PickedInternalLayoutProps & {
     avatar?: React.ReactNode
+    dense?: boolean | 'auto'
   }
 
 export function AdminLayout(props: AdminLayoutProps) {
-  const { children, avatar, ...layoutProps } = props
+  const { children, avatar, dense = 'auto', ...layoutProps } = props
   const { state, setState } = useLayoutState()
   const isMobile = useIsMobile()
 
   return (
     <InternalLayout
       {...layoutProps}
-      dense={!isMobile}
+      dense={dense === 'auto' ? !isMobile : dense}
       state={state}
       onStateChange={setState}
     >

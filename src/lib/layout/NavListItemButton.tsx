@@ -1,19 +1,18 @@
-import { ListItemButton as MuiListItemButton, SxProps } from '@mui/material'
+import { ListItemButton as MuiListItemButton } from '@mui/material'
 import type { ListItemButtonProps } from '@mui/material'
 import {
   createLink,
   ValidateToPath,
   LinkComponent,
 } from '@tanstack/react-router'
-import { PropsWithChildren, forwardRef } from 'react'
+import { forwardRef } from 'react'
 
-export type NavListItemButtonProps = PropsWithChildren & {
+export type NavListItemButtonProps = ListItemButtonProps & {
   to?: ValidateToPath | (string & {})
-  onClick?: (evt: React.MouseEvent) => void
-  sx?: SxProps
 }
 
-interface MUIListItemButtonLinkProps extends ListItemButtonProps<'a'> {
+interface MUIListItemButtonLinkProps
+  extends Omit<ListItemButtonProps<'a'>, 'component'> {
   // Add any additional props you want to pass to the ListItemButton
 }
 
@@ -33,15 +32,15 @@ export const CustomListItemButtonLink: LinkComponent<
 }
 
 export function NavListItemButton(props: NavListItemButtonProps) {
-  const { to, onClick, children, sx } = props
+  const { to, children, ...rest } = props
 
-  return to ? (
-    <CustomListItemButtonLink to={to} sx={sx}>
-      {children}
-    </CustomListItemButtonLink>
-  ) : (
-    <MuiListItemButton onClick={onClick} sx={sx}>
-      {children}
-    </MuiListItemButton>
-  )
+  if (to) {
+    return (
+      <CustomListItemButtonLink {...(rest as any)} to={to}>
+        {children}
+      </CustomListItemButtonLink>
+    )
+  }
+
+  return <MuiListItemButton {...rest}>{children}</MuiListItemButton>
 }

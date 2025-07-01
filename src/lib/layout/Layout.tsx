@@ -6,12 +6,15 @@ import {
   Drawer,
   DrawerProps,
   IconButton,
+  IconButtonProps,
   List,
   ListItem,
   ListItemButtonProps,
   ListItemIcon,
+  ListItemIconProps,
   ListItemProps,
   ListItemText,
+  ListItemTextProps,
   ListProps,
   ListSubheader,
   ListSubheaderProps,
@@ -47,8 +50,11 @@ export type LayoutProps = PropsWithChildren & {
   dense?: boolean
   drawerWidth?: number
   collapsedDrawerWidth?: number
+  sidebarTogglePosition?: 'top' | 'bottom'
   enableAppBar?: boolean
   menuItems?: React.ReactNode[]
+  navStartSlot?: React.ReactNode
+  navEndSlot?: React.ReactNode
   appBarProps?: Omit<
     AppBarProps,
     | 'title'
@@ -59,12 +65,15 @@ export type LayoutProps = PropsWithChildren & {
     | 'onDrawerToggle'
   >
   mainProps?: BoxProps
-  drawerProps?: Omit<DrawerProps, 'variant' | 'open' | 'onClose'>
-  listProps?: ListProps
-  listItemProps?: ListItemProps
-  listSubheaderProps?: ListSubheaderProps
-  listItemButtonProps?: Omit<ListItemButtonProps, 'to' | 'onClick'>
-  dividerProps?: Omit<DividerProps, 'orientation' | 'flexItem'>
+  navDrawerProps?: Omit<DrawerProps, 'variant' | 'open' | 'onClose'>
+  navListProps?: ListProps
+  navListItemProps?: ListItemProps
+  navListSubheaderProps?: ListSubheaderProps
+  navListItemButtonProps?: Omit<ListItemButtonProps, 'to' | 'onClick'>
+  navListItemIconProps?: ListItemIconProps
+  navListItemTextProps?: ListItemTextProps
+  navDividerProps?: Omit<DividerProps, 'orientation' | 'flexItem'>
+  navSidebarToggleButtonProps?: Omit<IconButtonProps, 'onClick'>
   sx?: SxProps
   initialState?: LayoutInitialState
   state?: LayoutState
@@ -79,19 +88,25 @@ export function Layout(props: LayoutProps) {
     collapsedDrawerWidth = defaultCollapsedDrawerWidth,
     dense,
     children,
+    sidebarTogglePosition = 'top',
     enableAppBar = true,
     menuItems,
     initialState,
     state,
     onStateChange,
+    navStartSlot,
+    navEndSlot,
     appBarProps,
     mainProps,
-    drawerProps,
-    listProps,
-    listItemProps,
-    listSubheaderProps,
-    listItemButtonProps,
-    dividerProps,
+    navDrawerProps,
+    navListProps,
+    navListItemProps,
+    navListSubheaderProps,
+    navListItemButtonProps,
+    navListItemIconProps,
+    navListItemTextProps,
+    navDividerProps,
+    navSidebarToggleButtonProps,
     sx,
   } = props
 
@@ -141,43 +156,60 @@ export function Layout(props: LayoutProps) {
   }
 
   const drawerContent = useMemo(() => {
+    const renderToggleSidebarToolbar = (expanded: boolean) => (
+      <Toolbar
+        variant={dense ? 'dense' : 'regular'}
+        sx={{
+          justifyContent: expanded ? 'flex-end' : 'center',
+          display: { xs: 'none', sm: 'flex' },
+        }}
+      >
+        <IconButton
+          {...navSidebarToggleButtonProps}
+          onClick={handleSidebarToggle}
+        >
+          {expanded ? <ChevronLeft /> : <ChevronRight />}
+        </IconButton>
+      </Toolbar>
+    )
+
     const renderNavSidebar = (expanded: boolean) => {
       return (
-        <div>
-          <Toolbar
-            variant={dense ? 'dense' : 'regular'}
-            sx={{
-              justifyContent: expanded ? 'flex-end' : 'center',
-              display: { xs: 'none', sm: 'flex' },
-            }}
-          >
-            <IconButton onClick={handleSidebarToggle}>
-              {expanded ? <ChevronLeft /> : <ChevronRight />}
-            </IconButton>
-          </Toolbar>
-          {navLists.map((list, index) => (
-            <Fragment key={`nav-list-${index}`}>
-              {renderNavList(expanded, list)}
-              {index < navLists.length - 1 && <Divider {...dividerProps} />}
-            </Fragment>
-          ))}
-        </div>
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
+          {sidebarTogglePosition === 'top' &&
+            renderToggleSidebarToolbar(expanded)}
+          <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+            {navStartSlot}
+            {navLists.map((list, index) => (
+              <Fragment key={`nav-list-${index}`}>
+                {renderNavList(expanded, list)}
+                {index < navLists.length - 1 && (
+                  <Divider {...navDividerProps} />
+                )}
+              </Fragment>
+            ))}
+            {navEndSlot}
+          </Box>
+          {sidebarTogglePosition === 'bottom' &&
+            renderToggleSidebarToolbar(expanded)}
+        </Box>
       )
     }
 
     const renderNavList = (expanded: boolean, navList: NavList) => {
       return (
-        <List dense={dense} {...listProps}>
+        <List dense={dense} {...navListProps}>
           {navList.title && expanded && (
             <ListSubheader
+              data-subheader={navList.title}
               sx={{ lineHeight: dense ? '35px' : undefined }}
-              {...listSubheaderProps}
+              {...navListSubheaderProps}
             >
               {navList.title}
             </ListSubheader>
           )}
           {navList.items.map((item, index) => (
-            <ListItem disablePadding key={index} {...listItemProps}>
+            <ListItem disablePadding key={index} {...navListItemProps}>
               <Tooltip
                 title={expanded ? '' : item.label}
                 placement='right'
@@ -190,26 +222,28 @@ export function Layout(props: LayoutProps) {
                 }}
               >
                 <NavListItemButton
+                  {...navListItemButtonProps}
                   to={item.path}
                   onClick={item.onClick}
-                  sx={listItemButtonProps?.sx as SxProps}
                 >
                   <ListItemIcon
                     sx={{
                       minWidth: '24px',
                     }}
+                    {...navListItemIconProps}
                   >
                     {item.icon}
                   </ListItemIcon>
                   {expanded && (
                     <ListItemText
-                      primary={item.label}
                       sx={{
                         ml: '1rem',
                         textOverflow: 'clip',
                         overflow: 'hidden',
                         whiteSpace: 'nowrap',
                       }}
+                      {...navListItemTextProps}
+                      primary={item.label}
                     />
                   )}
                 </NavListItemButton>
@@ -224,7 +258,13 @@ export function Layout(props: LayoutProps) {
       expanded: renderNavSidebar(true),
       collapsed: renderNavSidebar(false),
     }
-  }, [handleSidebarToggle, navLists, dense, listProps, listItemButtonProps])
+  }, [
+    handleSidebarToggle,
+    navLists,
+    dense,
+    navListProps,
+    navListItemButtonProps,
+  ])
 
   const { sx: mainSx, ...mainRest } = mainProps ?? {}
 
@@ -260,18 +300,18 @@ export function Layout(props: LayoutProps) {
             keepMounted: true,
           }}
           slotProps={{
-            ...drawerProps?.slotProps,
+            ...navDrawerProps?.slotProps,
             paper: {
-              ...drawerProps?.slotProps?.paper,
+              ...navDrawerProps?.slotProps?.paper,
               sx: {
-                ...(drawerProps?.slotProps?.paper as PaperProps)?.sx,
+                ...(navDrawerProps?.slotProps?.paper as PaperProps)?.sx,
                 boxSizing: 'border-box',
                 width: drawerWidth,
               },
             },
           }}
           sx={{
-            ...drawerProps?.sx,
+            ...navDrawerProps?.sx,
             display: { xs: 'block', sm: 'none' },
           }}
         >
@@ -280,11 +320,11 @@ export function Layout(props: LayoutProps) {
         <Drawer
           variant='permanent'
           slotProps={{
-            ...drawerProps?.slotProps,
+            ...navDrawerProps?.slotProps,
             paper: {
-              ...drawerProps?.slotProps?.paper,
+              ...navDrawerProps?.slotProps?.paper,
               sx: {
-                ...(drawerProps?.slotProps?.paper as PaperProps)?.sx,
+                ...(navDrawerProps?.slotProps?.paper as PaperProps)?.sx,
                 boxSizing: 'border-box',
                 width: sidebarOpen ? drawerWidth : collapsedDrawerWidth,
                 transition: 'width 0.2s',
