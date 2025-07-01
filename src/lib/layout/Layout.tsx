@@ -227,10 +227,11 @@ export function Layout(props: LayoutProps) {
                   onClick={item.onClick}
                 >
                   <ListItemIcon
+                    {...navListItemIconProps}
                     sx={{
+                      ...(navListItemIconProps?.sx as SxProps),
                       minWidth: '24px',
                     }}
-                    {...navListItemIconProps}
                   >
                     {item.icon}
                   </ListItemIcon>
