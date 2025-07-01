@@ -26,13 +26,13 @@ function RouteComponent() {
       navList={selectedNavList}
       enableAppBar={isMobile}
       sidebarTogglePosition='bottom'
-      navStartSlot={
+      navStartSlot={({ expanded }) => (
         <Box sx={{ p: 2 }}>
           <Typography variant='h6' sx={{ color: '#fff' }}>
-            Start Slot
+            {expanded ? 'Start Slot' : 'S'}
           </Typography>
         </Box>
-      }
+      )}
       navEndSlot={
         <Box>
           <Divider />
