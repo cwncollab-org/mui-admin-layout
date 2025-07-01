@@ -15,18 +15,27 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as NotFoundImport } from './routes/not-found'
 import { Route as IndexImport } from './routes/index'
+import { Route as ThemeExampleLayoutImport } from './routes/theme-example/_layout'
 import { Route as LayoutProviderExampleLayoutImport } from './routes/layout-provider-example/_layout'
+import { Route as ThemeExampleLayoutIndexImport } from './routes/theme-example/_layout/index'
 import { Route as LayoutProviderExampleLayoutIndexImport } from './routes/layout-provider-example/_layout/index'
 import { Route as LayoutProviderExampleLayoutLongPageImport } from './routes/layout-provider-example/_layout/long-page'
 import { Route as LayoutProviderExampleLayoutControlImport } from './routes/layout-provider-example/_layout/control'
 
 // Create Virtual Routes
 
+const ThemeExampleImport = createFileRoute('/theme-example')()
 const LayoutProviderExampleImport = createFileRoute(
   '/layout-provider-example',
 )()
 
 // Create/Update Routes
+
+const ThemeExampleRoute = ThemeExampleImport.update({
+  id: '/theme-example',
+  path: '/theme-example',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LayoutProviderExampleRoute = LayoutProviderExampleImport.update({
   id: '/layout-provider-example',
@@ -46,11 +55,22 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ThemeExampleLayoutRoute = ThemeExampleLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => ThemeExampleRoute,
+} as any)
+
 const LayoutProviderExampleLayoutRoute =
   LayoutProviderExampleLayoutImport.update({
     id: '/_layout',
     getParentRoute: () => LayoutProviderExampleRoute,
   } as any)
+
+const ThemeExampleLayoutIndexRoute = ThemeExampleLayoutIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ThemeExampleLayoutRoute,
+} as any)
 
 const LayoutProviderExampleLayoutIndexRoute =
   LayoutProviderExampleLayoutIndexImport.update({
@@ -105,6 +125,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProviderExampleLayoutImport
       parentRoute: typeof LayoutProviderExampleRoute
     }
+    '/theme-example': {
+      id: '/theme-example'
+      path: '/theme-example'
+      fullPath: '/theme-example'
+      preLoaderRoute: typeof ThemeExampleImport
+      parentRoute: typeof rootRoute
+    }
+    '/theme-example/_layout': {
+      id: '/theme-example/_layout'
+      path: '/theme-example'
+      fullPath: '/theme-example'
+      preLoaderRoute: typeof ThemeExampleLayoutImport
+      parentRoute: typeof ThemeExampleRoute
+    }
     '/layout-provider-example/_layout/control': {
       id: '/layout-provider-example/_layout/control'
       path: '/control'
@@ -125,6 +159,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/layout-provider-example/'
       preLoaderRoute: typeof LayoutProviderExampleLayoutIndexImport
       parentRoute: typeof LayoutProviderExampleLayoutImport
+    }
+    '/theme-example/_layout/': {
+      id: '/theme-example/_layout/'
+      path: '/'
+      fullPath: '/theme-example/'
+      preLoaderRoute: typeof ThemeExampleLayoutIndexImport
+      parentRoute: typeof ThemeExampleLayoutImport
     }
   }
 }
@@ -166,19 +207,45 @@ const LayoutProviderExampleRouteWithChildren =
     LayoutProviderExampleRouteChildren,
   )
 
+interface ThemeExampleLayoutRouteChildren {
+  ThemeExampleLayoutIndexRoute: typeof ThemeExampleLayoutIndexRoute
+}
+
+const ThemeExampleLayoutRouteChildren: ThemeExampleLayoutRouteChildren = {
+  ThemeExampleLayoutIndexRoute: ThemeExampleLayoutIndexRoute,
+}
+
+const ThemeExampleLayoutRouteWithChildren =
+  ThemeExampleLayoutRoute._addFileChildren(ThemeExampleLayoutRouteChildren)
+
+interface ThemeExampleRouteChildren {
+  ThemeExampleLayoutRoute: typeof ThemeExampleLayoutRouteWithChildren
+}
+
+const ThemeExampleRouteChildren: ThemeExampleRouteChildren = {
+  ThemeExampleLayoutRoute: ThemeExampleLayoutRouteWithChildren,
+}
+
+const ThemeExampleRouteWithChildren = ThemeExampleRoute._addFileChildren(
+  ThemeExampleRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/not-found': typeof NotFoundRoute
   '/layout-provider-example': typeof LayoutProviderExampleLayoutRouteWithChildren
+  '/theme-example': typeof ThemeExampleLayoutRouteWithChildren
   '/layout-provider-example/control': typeof LayoutProviderExampleLayoutControlRoute
   '/layout-provider-example/long-page': typeof LayoutProviderExampleLayoutLongPageRoute
   '/layout-provider-example/': typeof LayoutProviderExampleLayoutIndexRoute
+  '/theme-example/': typeof ThemeExampleLayoutIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/not-found': typeof NotFoundRoute
   '/layout-provider-example': typeof LayoutProviderExampleLayoutIndexRoute
+  '/theme-example': typeof ThemeExampleLayoutIndexRoute
   '/layout-provider-example/control': typeof LayoutProviderExampleLayoutControlRoute
   '/layout-provider-example/long-page': typeof LayoutProviderExampleLayoutLongPageRoute
 }
@@ -189,9 +256,12 @@ export interface FileRoutesById {
   '/not-found': typeof NotFoundRoute
   '/layout-provider-example': typeof LayoutProviderExampleRouteWithChildren
   '/layout-provider-example/_layout': typeof LayoutProviderExampleLayoutRouteWithChildren
+  '/theme-example': typeof ThemeExampleRouteWithChildren
+  '/theme-example/_layout': typeof ThemeExampleLayoutRouteWithChildren
   '/layout-provider-example/_layout/control': typeof LayoutProviderExampleLayoutControlRoute
   '/layout-provider-example/_layout/long-page': typeof LayoutProviderExampleLayoutLongPageRoute
   '/layout-provider-example/_layout/': typeof LayoutProviderExampleLayoutIndexRoute
+  '/theme-example/_layout/': typeof ThemeExampleLayoutIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -200,14 +270,17 @@ export interface FileRouteTypes {
     | '/'
     | '/not-found'
     | '/layout-provider-example'
+    | '/theme-example'
     | '/layout-provider-example/control'
     | '/layout-provider-example/long-page'
     | '/layout-provider-example/'
+    | '/theme-example/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/not-found'
     | '/layout-provider-example'
+    | '/theme-example'
     | '/layout-provider-example/control'
     | '/layout-provider-example/long-page'
   id:
@@ -216,9 +289,12 @@ export interface FileRouteTypes {
     | '/not-found'
     | '/layout-provider-example'
     | '/layout-provider-example/_layout'
+    | '/theme-example'
+    | '/theme-example/_layout'
     | '/layout-provider-example/_layout/control'
     | '/layout-provider-example/_layout/long-page'
     | '/layout-provider-example/_layout/'
+    | '/theme-example/_layout/'
   fileRoutesById: FileRoutesById
 }
 
@@ -226,12 +302,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   NotFoundRoute: typeof NotFoundRoute
   LayoutProviderExampleRoute: typeof LayoutProviderExampleRouteWithChildren
+  ThemeExampleRoute: typeof ThemeExampleRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   NotFoundRoute: NotFoundRoute,
   LayoutProviderExampleRoute: LayoutProviderExampleRouteWithChildren,
+  ThemeExampleRoute: ThemeExampleRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -246,7 +324,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/not-found",
-        "/layout-provider-example"
+        "/layout-provider-example",
+        "/theme-example"
       ]
     },
     "/": {
@@ -270,6 +349,19 @@ export const routeTree = rootRoute
         "/layout-provider-example/_layout/"
       ]
     },
+    "/theme-example": {
+      "filePath": "theme-example",
+      "children": [
+        "/theme-example/_layout"
+      ]
+    },
+    "/theme-example/_layout": {
+      "filePath": "theme-example/_layout.tsx",
+      "parent": "/theme-example",
+      "children": [
+        "/theme-example/_layout/"
+      ]
+    },
     "/layout-provider-example/_layout/control": {
       "filePath": "layout-provider-example/_layout/control.tsx",
       "parent": "/layout-provider-example/_layout"
@@ -281,6 +373,10 @@ export const routeTree = rootRoute
     "/layout-provider-example/_layout/": {
       "filePath": "layout-provider-example/_layout/index.tsx",
       "parent": "/layout-provider-example/_layout"
+    },
+    "/theme-example/_layout/": {
+      "filePath": "theme-example/_layout/index.tsx",
+      "parent": "/theme-example/_layout"
     }
   }
 }

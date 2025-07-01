@@ -25,23 +25,6 @@ function RouteComponent() {
         </Avatar>
       }
       enableAppBar={true}
-      drawerProps={{
-        slotProps: {
-          paper: {
-            sx: {},
-          },
-        },
-      }}
-      listSubheaderProps={{
-        sx: { bgcolor: 'inherit' },
-      }}
-      listItemButtonProps={{
-        sx: {
-          '&.active': {
-            bgcolor: t => t.palette.grey[200],
-          },
-        },
-      }}
       menuItems={[
         [
           <MenuItem dense key='account' onClick={() => setMenuOpen(false)}>

@@ -6,12 +6,17 @@ export const navList: NavList = {
     {
       icon: <Form />,
       label: 'Layout Provider Example',
-      path: '/layout-provider-example',
+      path: '/layout-provider-example/control',
     },
     {
       icon: <Form />,
-      label: 'Not Found',
-      path: '/not-found',
+      label: 'Long Page',
+      path: '/layout-provider-example/long-page',
+    },
+    {
+      icon: <Form />,
+      label: 'Themed',
+      path: '/theme-example',
     },
   ],
 }
@@ -19,18 +24,7 @@ export const navList: NavList = {
 export const grouppedNavList: NavList[] = [
   {
     title: 'Group1',
-    items: [
-      {
-        icon: <Form />,
-        label: 'Layout Provider Example',
-        path: '/layout-provider-example/control',
-      },
-      {
-        icon: <Form />,
-        label: 'Long Page',
-        path: '/layout-provider-example/long-page',
-      },
-    ],
+    items: [...navList.items],
   },
   {
     title: 'Group2',
