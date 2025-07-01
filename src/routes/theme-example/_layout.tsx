@@ -89,6 +89,9 @@ function RouteComponent() {
             position: 'relative',
             color: '#4268B3',
           },
+          '&.active .MuiListItemIcon-root': {
+            color: '#4268B3',
+          },
           '&.active::before': {
             content: '""',
             position: 'absolute',
@@ -102,6 +105,7 @@ function RouteComponent() {
           },
         },
       }}
+      navListItemIconProps={{ sx: { color: '#fff' } }}
       navDividerProps={{
         sx: { display: 'none' }, // Hide divider
       }}
