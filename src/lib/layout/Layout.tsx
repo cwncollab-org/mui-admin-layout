@@ -53,8 +53,12 @@ export type LayoutProps = PropsWithChildren & {
   sidebarTogglePosition?: 'top' | 'bottom'
   enableAppBar?: boolean
   menuItems?: React.ReactNode[]
-  navStartSlot?: React.ReactNode
-  navEndSlot?: React.ReactNode
+  navStartSlot?:
+    | React.ReactNode
+    | ((state: { expanded: boolean }) => React.ReactNode)
+  navEndSlot?:
+    | React.ReactNode
+    | ((state: { expanded: boolean }) => React.ReactNode)
   appBarProps?: Omit<
     AppBarProps,
     | 'title'
@@ -179,7 +183,9 @@ export function Layout(props: LayoutProps) {
           {sidebarTogglePosition === 'top' &&
             renderToggleSidebarToolbar(expanded)}
           <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
-            {navStartSlot}
+            {typeof navStartSlot === 'function'
+              ? navStartSlot({ expanded })
+              : navStartSlot}
             {navLists.map((list, index) => (
               <Fragment key={`nav-list-${index}`}>
                 {renderNavList(expanded, list)}
@@ -188,7 +194,9 @@ export function Layout(props: LayoutProps) {
                 )}
               </Fragment>
             ))}
-            {navEndSlot}
+            {typeof navEndSlot === 'function'
+              ? navEndSlot({ expanded })
+              : navEndSlot}
           </Box>
           {sidebarTogglePosition === 'bottom' &&
             renderToggleSidebarToolbar(expanded)}
