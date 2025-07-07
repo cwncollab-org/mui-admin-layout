@@ -1,6 +1,7 @@
 import {
   Box,
   BoxProps,
+  Collapse,
   Divider,
   DividerProps,
   Drawer,
@@ -9,6 +10,7 @@ import {
   IconButtonProps,
   List,
   ListItem,
+  ListItemButton,
   ListItemButtonProps,
   ListItemIcon,
   ListItemIconProps,
@@ -22,13 +24,14 @@ import {
   SxProps,
   Toolbar,
   Tooltip,
+  useTheme,
 } from '@mui/material'
-import { useMemo, PropsWithChildren, Fragment, useCallback } from 'react'
+import { useMemo, PropsWithChildren, Fragment, useCallback, use } from 'react'
 import { ChevronRight } from '@mui/icons-material'
 import { useState } from 'react'
 import { ChevronLeft } from '@mui/icons-material'
 import { AppBar, AppBarInitialState, AppBarProps, AppBarState } from './AppBar'
-import { NavList } from './types'
+import { NavItem, NavList } from './types'
 import { NavListItemButton } from './NavListItemButton'
 
 const defaultDrawerWidth = 240
@@ -85,6 +88,7 @@ export type LayoutProps = PropsWithChildren & {
 }
 
 export function Layout(props: LayoutProps) {
+  const theme = useTheme()
   const {
     title,
     navList = [],
@@ -104,7 +108,6 @@ export function Layout(props: LayoutProps) {
     mainProps,
     navDrawerProps,
     navListProps,
-    navListItemProps,
     navListSubheaderProps,
     navListItemButtonProps,
     navListItemIconProps,
@@ -113,7 +116,6 @@ export function Layout(props: LayoutProps) {
     navSidebarToggleButtonProps,
     sx,
   } = props
-
   const [mobileOpen, setMobileOpen] = useState(false)
   const [_layoutState, setLayoutState] = useState<LayoutState>(
     initialState
@@ -160,7 +162,11 @@ export function Layout(props: LayoutProps) {
   }
 
   const drawerContent = useMemo(() => {
-    const renderToggleSidebarToolbar = (expanded: boolean) => (
+    const renderToggleSidebarToolbar = ({
+      expanded,
+    }: {
+      expanded: boolean
+    }) => (
       <Toolbar
         variant={dense ? 'dense' : 'regular'}
         sx={{
@@ -177,11 +183,11 @@ export function Layout(props: LayoutProps) {
       </Toolbar>
     )
 
-    const renderNavSidebar = (expanded: boolean) => {
+    const renderNavSidebar = ({ expanded }: { expanded: boolean }) => {
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
           {sidebarTogglePosition === 'top' &&
-            renderToggleSidebarToolbar(expanded)}
+            renderToggleSidebarToolbar({ expanded })}
           <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
             {typeof navStartSlot === 'function'
               ? navStartSlot({ expanded })
@@ -199,73 +205,122 @@ export function Layout(props: LayoutProps) {
               : navEndSlot}
           </Box>
           {sidebarTogglePosition === 'bottom' &&
-            renderToggleSidebarToolbar(expanded)}
+            renderToggleSidebarToolbar({ expanded })}
         </Box>
+      )
+    }
+
+    const renderListItem = (
+      expanded: boolean,
+      item: NavItem,
+      sx?: Omit<
+        SxProps<typeof theme>,
+        'display' | 'alignItems' | 'justifyContent'
+      >
+    ) => {
+      return (
+        <ListItem disablePadding>
+          <Tooltip
+            title={expanded ? '' : item.label}
+            placement='right'
+            slotProps={{
+              popper: {
+                modifiers: [{ name: 'offset', options: { offset: [0, -12] } }],
+              },
+            }}
+          >
+            <NavListItemButton
+              {...navListItemButtonProps}
+              to={item.path}
+              onClick={item.onClick}
+              data-expanded={expanded ? 'expanded' : undefined}
+              sx={{
+                '&:not([data-expanded])': {
+                  justifyContent: 'center',
+                },
+                ...sx,
+                ...navListItemButtonProps?.sx,
+              }}
+            >
+              <ListItemIcon
+                {...navListItemIconProps}
+                data-expanded={expanded ? 'expanded' : undefined}
+                sx={{
+                  '&:not([data-expanded])': {
+                    minWidth: 24,
+                  },
+                  ...navListItemIconProps?.sx,
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+
+              <ListItemText
+                {...navListItemTextProps}
+                primary={item.label}
+                data-expanded={expanded ? 'expanded' : undefined}
+                sx={{
+                  textOverflow: 'clip',
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  '&:not([data-expanded])': {
+                    display: 'none',
+                  },
+                  ...navListItemTextProps?.sx,
+                }}
+              />
+            </NavListItemButton>
+          </Tooltip>
+        </ListItem>
       )
     }
 
     const renderNavList = (expanded: boolean, navList: NavList) => {
       return (
-        <List dense={dense} {...navListProps}>
-          {navList.title && expanded && (
+        <List
+          dense={dense}
+          {...navListProps}
+          data-expanded={expanded ? 'expanded' : undefined}
+        >
+          {navList.title && (
             <ListSubheader
               data-subheader={navList.title}
-              sx={{ lineHeight: dense ? '35px' : undefined }}
+              data-expanded={expanded ? 'expanded' : undefined}
               {...navListSubheaderProps}
+              sx={{
+                lineHeight: dense ? '35px' : undefined,
+                '&:not([data-expanded])': {
+                  display: 'none',
+                },
+                ...(navListSubheaderProps?.sx as SxProps),
+              }}
             >
               {navList.title}
             </ListSubheader>
           )}
           {navList.items.map((item, index) => (
-            <ListItem disablePadding key={index} {...navListItemProps}>
-              <Tooltip
-                title={expanded ? '' : item.label}
-                placement='right'
-                slotProps={{
-                  popper: {
-                    modifiers: [
-                      { name: 'offset', options: { offset: [0, -12] } },
-                    ],
-                  },
-                }}
-              >
-                <NavListItemButton
-                  {...navListItemButtonProps}
-                  to={item.path}
-                  onClick={item.onClick}
-                >
-                  <ListItemIcon
-                    {...navListItemIconProps}
-                    sx={{
-                      ...(navListItemIconProps?.sx as SxProps),
-                      minWidth: '24px',
-                    }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  {expanded && (
-                    <ListItemText
-                      sx={{
-                        ml: '1rem',
-                        textOverflow: 'clip',
-                        overflow: 'hidden',
-                        whiteSpace: 'nowrap',
-                      }}
-                      {...navListItemTextProps}
-                      primary={item.label}
-                    />
-                  )}
-                </NavListItemButton>
-              </Tooltip>
-            </ListItem>
+            <Fragment key={`nav-item-${index}`}>
+              {renderListItem(expanded, item)}
+              {item.subItems?.length && (
+                <Collapse in>
+                  <List dense={dense} component='div' disablePadding>
+                    {item.subItems.map((item, index) => (
+                      <Fragment key={`nav-subitem-${index}`}>
+                        {renderListItem(expanded, item, { pl: 4 })}
+                      </Fragment>
+                    ))}
+                  </List>
+                </Collapse>
+              )}
+            </Fragment>
           ))}
         </List>
       )
     }
 
     return {
-      expanded: renderNavSidebar(true),
-      collapsed: renderNavSidebar(false),
+      expanded: renderNavSidebar({ expanded: true }),
+      collapsed: renderNavSidebar({ expanded: false }),
     }
   }, [
     handleSidebarToggle,

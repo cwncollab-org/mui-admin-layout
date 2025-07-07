@@ -18,6 +18,16 @@ export const navList: NavList = {
       label: 'Themed',
       path: '/theme-example',
     },
+    {
+      icon: <Form />,
+      label: 'With Subitems',
+      subItems: [
+        {
+          icon: <Form />,
+          label: 'Subitem 1',
+        },
+      ],
+    },
   ],
 }
 

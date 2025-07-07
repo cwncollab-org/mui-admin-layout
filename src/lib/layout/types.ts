@@ -7,8 +7,12 @@ export type NavList = {
 }
 
 export type NavItem = {
-  icon: React.ReactNode
+  key?: string
+  icon?: React.ReactNode
   label: string
   path?: ValidateToPath | (string & {})
   onClick?: (evt: MouseEvent) => void
+  subItems?: NavSubItem[]
 }
+
+export type NavSubItem = Omit<NavItem, 'subItems'>

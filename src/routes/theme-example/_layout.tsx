@@ -59,6 +59,7 @@ function RouteComponent() {
           bgcolor: 'inherit',
           color: '#fff',
           position: 'relative',
+          overflowX: 'hidden',
 
           '&::before': {
             content: '""',
