@@ -185,10 +185,16 @@ export function Layout(props: LayoutProps) {
 
     const renderNavSidebar = ({ expanded }: { expanded: boolean }) => {
       return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: 1,
+          }}
+        >
           {sidebarTogglePosition === 'top' &&
             renderToggleSidebarToolbar({ expanded })}
-          <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+          <Box sx={{ flexGrow: 1, overflowY: 'auto', overflowX: 'hidden' }}>
             {typeof navStartSlot === 'function'
               ? navStartSlot({ expanded })
               : navStartSlot}
@@ -233,9 +239,9 @@ export function Layout(props: LayoutProps) {
               {...navListItemButtonProps}
               to={item.path}
               onClick={item.onClick}
-              data-expanded={expanded ? 'expanded' : undefined}
+              data-collapsed={!expanded ? 'collapsed' : undefined}
               sx={{
-                '&:not([data-expanded])': {
+                '&[data-collapsed]': {
                   justifyContent: 'center',
                 },
                 ...sx,
@@ -244,9 +250,9 @@ export function Layout(props: LayoutProps) {
             >
               <ListItemIcon
                 {...navListItemIconProps}
-                data-expanded={expanded ? 'expanded' : undefined}
+                data-collapsed={!expanded ? 'collapsed' : undefined}
                 sx={{
-                  '&:not([data-expanded])': {
+                  '&[data-collapsed]': {
                     minWidth: 24,
                   },
                   ...navListItemIconProps?.sx,
@@ -258,12 +264,12 @@ export function Layout(props: LayoutProps) {
               <ListItemText
                 {...navListItemTextProps}
                 primary={item.label}
-                data-expanded={expanded ? 'expanded' : undefined}
+                data-collapsed={!expanded ? 'collapsed' : undefined}
                 sx={{
                   textOverflow: 'clip',
                   overflow: 'hidden',
                   whiteSpace: 'nowrap',
-                  '&:not([data-expanded])': {
+                  '&[data-collapsed]': {
                     display: 'none',
                   },
                   ...navListItemTextProps?.sx,
@@ -280,16 +286,16 @@ export function Layout(props: LayoutProps) {
         <List
           dense={dense}
           {...navListProps}
-          data-expanded={expanded ? 'expanded' : undefined}
+          data-collapsed={!expanded ? 'collapsed' : undefined}
         >
           {navList.title && (
             <ListSubheader
               data-subheader={navList.title}
-              data-expanded={expanded ? 'expanded' : undefined}
+              data-collapsed={!expanded ? 'collapsed' : undefined}
               {...navListSubheaderProps}
               sx={{
                 lineHeight: dense ? '35px' : undefined,
-                '&:not([data-expanded])': {
+                '&[data-collapsed]': {
                   display: 'none',
                 },
                 ...(navListSubheaderProps?.sx as SxProps),
