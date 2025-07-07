@@ -1,7 +1,12 @@
+import ChevronLeft from '@mui/icons-material/ChevronLeft'
+import ChevronRight from '@mui/icons-material/ChevronRight'
+import ExpandLess from '@mui/icons-material/ExpandLess'
+import ExpandMore from '@mui/icons-material/ExpandMore'
 import {
   Box,
   BoxProps,
   Collapse,
+  CollapseProps,
   Divider,
   DividerProps,
   Drawer,
@@ -10,7 +15,6 @@ import {
   IconButtonProps,
   List,
   ListItem,
-  ListItemButton,
   ListItemButtonProps,
   ListItemIcon,
   ListItemIconProps,
@@ -26,13 +30,16 @@ import {
   Tooltip,
   useTheme,
 } from '@mui/material'
-import { useMemo, PropsWithChildren, Fragment, useCallback, use } from 'react'
-import { ChevronRight } from '@mui/icons-material'
-import { useState } from 'react'
-import { ChevronLeft } from '@mui/icons-material'
+import {
+  Fragment,
+  PropsWithChildren,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react'
 import { AppBar, AppBarInitialState, AppBarProps, AppBarState } from './AppBar'
-import { NavItem, NavList } from './types'
 import { NavListItemButton } from './NavListItemButton'
+import { NavItem, NavList } from './types'
 
 const defaultDrawerWidth = 240
 const defaultCollapsedDrawerWidth = 64
@@ -40,11 +47,13 @@ const defaultCollapsedDrawerWidth = 64
 export type LayoutState = {
   sidebarOpen: boolean
   appBarState: AppBarState
+  submenuOpen: Record<string, boolean>
 }
 
 export type LayoutInitialState = {
   sidebarOpen?: boolean
   appBarState?: AppBarInitialState
+  submenuOpen?: Record<string, boolean>
 }
 
 export type LayoutProps = PropsWithChildren & {
@@ -82,6 +91,7 @@ export type LayoutProps = PropsWithChildren & {
   navDividerProps?: Omit<DividerProps, 'orientation' | 'flexItem'>
   navSidebarToggleButtonProps?: Omit<IconButtonProps, 'onClick'>
   navListSubitemButtonProps?: Pick<ListItemButtonProps, 'sx'>
+  navCollapseProps?: Omit<CollapseProps, 'in'>
   sx?: SxProps
   initialState?: LayoutInitialState
   state?: LayoutState
@@ -117,6 +127,7 @@ export function Layout(props: LayoutProps) {
     navDividerProps,
     navSidebarToggleButtonProps,
     navListSubitemButtonProps,
+    navCollapseProps,
     sx,
   } = props
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -125,12 +136,14 @@ export function Layout(props: LayoutProps) {
       ? {
           sidebarOpen: initialState.sidebarOpen ?? true,
           appBarState: { ...initialState.appBarState, menuOpen: true },
+          submenuOpen: initialState.submenuOpen ?? {},
         }
       : {
           sidebarOpen: true,
           appBarState: {
             menuOpen: true,
           },
+          submenuOpen: {},
         }
   )
   const layoutState = state ?? _layoutState
@@ -165,6 +178,23 @@ export function Layout(props: LayoutProps) {
   }
 
   const drawerContent = useMemo(() => {
+    const handleToggleSubmenu = (
+      e: React.MouseEvent<HTMLDivElement>,
+      item: NavItem
+    ) => {
+      item?.onClick?.(e)
+      if (!e.isPropagationStopped()) {
+        const itemKey = getItemKey(item)
+        handleStateChange({
+          ...layoutState,
+          submenuOpen: {
+            ...layoutState.submenuOpen,
+            [itemKey]: !layoutState.submenuOpen[itemKey],
+          },
+        })
+      }
+    }
+
     const renderToggleSidebarToolbar = ({
       expanded,
     }: {
@@ -219,14 +249,21 @@ export function Layout(props: LayoutProps) {
       )
     }
 
-    const renderListItem = (
-      expanded: boolean,
-      item: NavItem,
+    const renderListItem = ({
+      expanded,
+      item,
+      sx,
+    }: {
+      expanded: boolean
+      item: NavItem
       sx?: Omit<
         SxProps<typeof theme>,
         'display' | 'alignItems' | 'justifyContent'
       >
-    ) => {
+    }) => {
+      const itemKey = getItemKey(item)
+      const hasSubmenu = Boolean(item.subitems?.length)
+
       return (
         <ListItem
           disablePadding
@@ -245,7 +282,9 @@ export function Layout(props: LayoutProps) {
             <NavListItemButton
               {...navListItemButtonProps}
               to={item.path}
-              onClick={item.onClick}
+              onClick={
+                hasSubmenu ? e => handleToggleSubmenu(e, item) : item.onClick
+              }
               data-collapsed={!expanded ? 'collapsed' : undefined}
               sx={{
                 '&[data-collapsed]': {
@@ -282,6 +321,14 @@ export function Layout(props: LayoutProps) {
                   ...navListItemTextProps?.sx,
                 }}
               />
+
+              {hasSubmenu ? (
+                !Boolean(layoutState.submenuOpen[itemKey]) ? (
+                  <ExpandMore />
+                ) : (
+                  <ExpandLess />
+                )
+              ) : null}
             </NavListItemButton>
           </Tooltip>
         </ListItem>
@@ -311,25 +358,33 @@ export function Layout(props: LayoutProps) {
               {navList.title}
             </ListSubheader>
           )}
-          {navList.items.map((item, index) => (
-            <Fragment key={`nav-item-${index}`}>
-              {renderListItem(expanded, item)}
-              {item.subitems?.length && (
-                <Collapse in>
-                  <List dense={dense} component='div' disablePadding>
-                    {item.subitems.map((item, index) => (
-                      <Fragment key={`nav-subitem-${index}`}>
-                        {renderListItem(expanded, item, {
-                          ...navListSubitemButtonProps?.sx,
-                          pl: 4,
-                        })}
-                      </Fragment>
-                    ))}
-                  </List>
-                </Collapse>
-              )}
-            </Fragment>
-          ))}
+          {navList.items.map((item, index) => {
+            const itemKey = getItemKey(item)
+            const expandedSubmenu = Boolean(layoutState.submenuOpen[itemKey])
+            return (
+              <Fragment key={`nav-item-${index}`}>
+                {renderListItem({ expanded, item })}
+                {item.subitems?.length && (
+                  <Collapse in={expandedSubmenu} {...navCollapseProps}>
+                    <List dense={dense} component='div' disablePadding>
+                      {item.subitems.map((item, index) => (
+                        <Fragment key={`nav-subitem-${index}`}>
+                          {renderListItem({
+                            expanded,
+                            item,
+                            sx: {
+                              ...navListSubitemButtonProps?.sx,
+                              pl: 4,
+                            },
+                          })}
+                        </Fragment>
+                      ))}
+                    </List>
+                  </Collapse>
+                )}
+              </Fragment>
+            )
+          })}
         </List>
       )
     }
@@ -450,4 +505,8 @@ export function Layout(props: LayoutProps) {
       </Box>
     </Box>
   )
+}
+
+function getItemKey(item: NavItem): string {
+  return item.key ?? item.label
 }

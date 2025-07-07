@@ -11,7 +11,10 @@ export function AdminLayoutProvider(props: AdminLayoutProviderProps) {
   const { children, mobileMaxWidth, initialState } = props
 
   return (
-    <LayoutProvider initialState={initialState} mobileMaxWidth={mobileMaxWidth}>
+    <LayoutProvider
+      initialState={{ submenuOpen: {}, ...initialState }}
+      mobileMaxWidth={mobileMaxWidth}
+    >
       {children}
     </LayoutProvider>
   )
