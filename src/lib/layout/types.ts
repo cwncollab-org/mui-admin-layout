@@ -12,7 +12,7 @@ export type NavItem = {
   label: string
   path?: ValidateToPath | (string & {})
   onClick?: (evt: MouseEvent) => void
-  subItems?: NavSubItem[]
+  subitems?: NavSubitem[]
 }
 
-export type NavSubItem = Omit<NavItem, 'subItems'>
+export type NavSubitem = Omit<NavItem, 'subitems'>

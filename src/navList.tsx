@@ -21,7 +21,7 @@ export const navList: NavList = {
     {
       icon: <Form />,
       label: 'With Subitems',
-      subItems: [
+      subitems: [
         {
           icon: <Form />,
           label: 'Subitem 1',

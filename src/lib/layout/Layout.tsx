@@ -81,6 +81,7 @@ export type LayoutProps = PropsWithChildren & {
   navListItemTextProps?: ListItemTextProps
   navDividerProps?: Omit<DividerProps, 'orientation' | 'flexItem'>
   navSidebarToggleButtonProps?: Omit<IconButtonProps, 'onClick'>
+  navListSubitemButtonProps?: Pick<ListItemButtonProps, 'sx'>
   sx?: SxProps
   initialState?: LayoutInitialState
   state?: LayoutState
@@ -108,12 +109,14 @@ export function Layout(props: LayoutProps) {
     mainProps,
     navDrawerProps,
     navListProps,
+    navListItemProps,
     navListSubheaderProps,
     navListItemButtonProps,
     navListItemIconProps,
     navListItemTextProps,
     navDividerProps,
     navSidebarToggleButtonProps,
+    navListSubitemButtonProps,
     sx,
   } = props
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -225,7 +228,11 @@ export function Layout(props: LayoutProps) {
       >
     ) => {
       return (
-        <ListItem disablePadding>
+        <ListItem
+          disablePadding
+          {...navListItemProps}
+          data-collapsed={!expanded ? 'collapsed' : undefined}
+        >
           <Tooltip
             title={expanded ? '' : item.label}
             placement='right'
@@ -307,12 +314,15 @@ export function Layout(props: LayoutProps) {
           {navList.items.map((item, index) => (
             <Fragment key={`nav-item-${index}`}>
               {renderListItem(expanded, item)}
-              {item.subItems?.length && (
+              {item.subitems?.length && (
                 <Collapse in>
                   <List dense={dense} component='div' disablePadding>
-                    {item.subItems.map((item, index) => (
+                    {item.subitems.map((item, index) => (
                       <Fragment key={`nav-subitem-${index}`}>
-                        {renderListItem(expanded, item, { pl: 4 })}
+                        {renderListItem(expanded, item, {
+                          ...navListSubitemButtonProps?.sx,
+                          pl: 4,
+                        })}
                       </Fragment>
                     ))}
                   </List>
