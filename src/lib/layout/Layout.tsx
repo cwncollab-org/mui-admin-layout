@@ -155,8 +155,7 @@ function NavListItem({
             '&[data-collapsed]': {
               justifyContent: 'center',
             },
-            ...(sx as any),
-            ...(navListItemButtonProps?.sx as any),
+            ...({ ...sx, ...navListItemButtonProps?.sx } as SxProps),
           }}
         >
           <ListItemIcon
@@ -311,10 +310,8 @@ function NavigationList({
                         navListItemIconProps={navListItemIconProps}
                         navListItemTextProps={navListItemTextProps}
                         sx={{
-                          ...(typeof navListSubitemButtonProps?.sx === 'object'
-                            ? navListSubitemButtonProps.sx
-                            : {}),
                           pl: 4,
+                          ...(navListSubitemButtonProps?.sx as SxProps),
                         }}
                       />
                     </Fragment>
@@ -604,10 +601,10 @@ export function Layout(props: LayoutProps) {
             paper: {
               ...navDrawerProps?.slotProps?.paper,
               sx: {
-                ...(navDrawerProps?.slotProps?.paper as PaperProps)?.sx,
                 boxSizing: 'border-box',
                 width: sidebarOpen ? drawerWidth : collapsedDrawerWidth,
                 transition: 'width 0.2s',
+                ...(navDrawerProps?.slotProps?.paper as PaperProps)?.sx,
               },
             },
           }}
