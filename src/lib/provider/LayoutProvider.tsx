@@ -12,6 +12,7 @@ const defaultInitialState: LayoutState = {
   appBarState: {
     menuOpen: false,
   },
+  submenuOpen: {},
 }
 
 export function LayoutProvider(props: AdminLayoutProviderProps) {
