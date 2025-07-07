@@ -186,7 +186,8 @@ function NavListItem({
             }}
           />
 
-          {hasSubmenu &&
+          {expanded &&
+            hasSubmenu &&
             (layoutState.submenuOpen[itemKey] ? (
               <ExpandLess />
             ) : (
@@ -295,7 +296,7 @@ function NavigationList({
               navListItemIconProps={navListItemIconProps}
               navListItemTextProps={navListItemTextProps}
             />
-            {item.subitems?.length && (
+            {expanded && item.subitems?.length && (
               <Collapse in={expandedSubmenu} {...navCollapseProps}>
                 <List dense={dense} component='div' disablePadding>
                   {item.subitems.map((subitem, subIndex) => (
