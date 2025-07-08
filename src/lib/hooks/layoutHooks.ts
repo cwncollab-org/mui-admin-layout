@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { layoutContext } from '../provider/layoutContext'
-import { LayoutState } from '../layout/Layout'
+import { LayoutState } from '../layout/types'
 import { AppBarState } from '../layout/AppBar'
 
 export function useLayoutState() {

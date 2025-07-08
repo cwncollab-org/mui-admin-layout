@@ -1,45 +1,34 @@
-import ChevronLeft from '@mui/icons-material/ChevronLeft'
-import ChevronRight from '@mui/icons-material/ChevronRight'
-import ExpandLess from '@mui/icons-material/ExpandLess'
-import ExpandMore from '@mui/icons-material/ExpandMore'
 import {
   Box,
   BoxProps,
-  Collapse,
   CollapseProps,
-  Divider,
   DividerProps,
   Drawer,
   DrawerProps,
-  IconButton,
   IconButtonProps,
-  List,
-  ListItem,
   ListItemButtonProps,
-  ListItemIcon,
   ListItemIconProps,
   ListItemProps,
-  ListItemText,
   ListItemTextProps,
   ListProps,
-  ListSubheader,
   ListSubheaderProps,
   PaperProps,
   SxProps,
   Toolbar,
-  Tooltip,
 } from '@mui/material'
-import { Fragment, PropsWithChildren, useCallback, useState } from 'react'
-import { AppBar, AppBarInitialState, AppBarProps, AppBarState } from './AppBar'
-import { NavListItemButton } from './NavListItemButton'
-import { NavItem, NavList } from './types'
+import { PropsWithChildren, useCallback, useMemo, useState } from 'react'
+import { AppBar, AppBarProps } from './AppBar'
+import {
+  KeyedNavItem,
+  KeyedNavList,
+  LayoutInitialState,
+  LayoutState,
+  NavList,
+} from './types'
+import { SidebarContent } from './SidebarContent'
 
-// Constants
 const DEFAULT_DRAWER_WIDTH = 240
 const DEFAULT_COLLAPSED_DRAWER_WIDTH = 64
-
-// Helper functions
-const getItemKey = (item: NavItem): string => item.key ?? item.label
 
 const createDefaultLayoutState = (
   initialState?: LayoutInitialState
@@ -48,19 +37,6 @@ const createDefaultLayoutState = (
   appBarState: { ...initialState?.appBarState, menuOpen: true },
   submenuOpen: initialState?.submenuOpen ?? {},
 })
-
-// Types
-export type LayoutState = {
-  sidebarOpen: boolean
-  appBarState: AppBarState
-  submenuOpen: Record<string, boolean>
-}
-
-export type LayoutInitialState = {
-  sidebarOpen?: boolean
-  appBarState?: AppBarInitialState
-  submenuOpen?: Record<string, boolean>
-}
 
 export type LayoutProps = PropsWithChildren & {
   title?: string | React.ReactNode
@@ -104,336 +80,6 @@ export type LayoutProps = PropsWithChildren & {
   onStateChange?: (state: LayoutState) => void
 }
 
-// Helper Components
-type NavListItemProps = {
-  item: NavItem
-  expanded: boolean
-  layoutState: LayoutState
-  onToggleSubmenu: (e: React.MouseEvent<HTMLDivElement>, item: NavItem) => void
-  navListItemProps?: ListItemProps
-  navListItemButtonProps?: Omit<ListItemButtonProps, 'to' | 'onClick'>
-  navListItemIconProps?: ListItemIconProps
-  navListItemTextProps?: ListItemTextProps
-  sx?: SxProps<any>
-}
-
-function NavListItem({
-  item,
-  expanded,
-  layoutState,
-  onToggleSubmenu,
-  navListItemProps,
-  navListItemButtonProps,
-  navListItemIconProps,
-  navListItemTextProps,
-  sx,
-}: NavListItemProps) {
-  const itemKey = getItemKey(item)
-  const hasSubmenu = Boolean(item.subitems?.length)
-
-  return (
-    <ListItem
-      disablePadding
-      {...navListItemProps}
-      data-collapsed={!expanded ? 'collapsed' : undefined}
-    >
-      <Tooltip
-        title={expanded ? '' : item.label}
-        placement='right'
-        slotProps={{
-          popper: {
-            modifiers: [{ name: 'offset', options: { offset: [0, -12] } }],
-          },
-        }}
-      >
-        <NavListItemButton
-          {...navListItemButtonProps}
-          to={item.path}
-          onClick={hasSubmenu ? e => onToggleSubmenu(e, item) : item.onClick}
-          data-collapsed={!expanded ? 'collapsed' : undefined}
-          sx={{
-            '&[data-collapsed]': {
-              justifyContent: 'center',
-            },
-            ...({ ...sx, ...navListItemButtonProps?.sx } as SxProps),
-          }}
-        >
-          <ListItemIcon
-            {...navListItemIconProps}
-            data-collapsed={!expanded ? 'collapsed' : undefined}
-            sx={{
-              '&[data-collapsed]': {
-                minWidth: 24,
-              },
-              ...navListItemIconProps?.sx,
-            }}
-          >
-            {item.icon}
-          </ListItemIcon>
-
-          <ListItemText
-            {...navListItemTextProps}
-            primary={item.label}
-            data-collapsed={!expanded ? 'collapsed' : undefined}
-            sx={{
-              textOverflow: 'clip',
-              overflow: 'hidden',
-              whiteSpace: 'nowrap',
-              '&[data-collapsed]': {
-                display: 'none',
-              },
-              ...navListItemTextProps?.sx,
-            }}
-          />
-
-          {expanded &&
-            hasSubmenu &&
-            (layoutState.submenuOpen[itemKey] ? (
-              <ExpandLess />
-            ) : (
-              <ExpandMore />
-            ))}
-        </NavListItemButton>
-      </Tooltip>
-    </ListItem>
-  )
-}
-
-type SidebarToggleProps = {
-  expanded: boolean
-  dense?: boolean
-  onToggle: () => void
-  navSidebarToggleButtonProps?: Omit<IconButtonProps, 'onClick'>
-}
-
-function SidebarToggle({
-  expanded,
-  dense,
-  onToggle,
-  navSidebarToggleButtonProps,
-}: SidebarToggleProps) {
-  return (
-    <Toolbar
-      variant={dense ? 'dense' : 'regular'}
-      sx={{
-        justifyContent: expanded ? 'flex-end' : 'center',
-        display: { xs: 'none', sm: 'flex' },
-      }}
-    >
-      <IconButton {...navSidebarToggleButtonProps} onClick={onToggle}>
-        {expanded ? <ChevronLeft /> : <ChevronRight />}
-      </IconButton>
-    </Toolbar>
-  )
-}
-
-type NavigationListProps = {
-  navList: NavList
-  expanded: boolean
-  layoutState: LayoutState
-  onToggleSubmenu: (e: React.MouseEvent<HTMLDivElement>, item: NavItem) => void
-  dense?: boolean
-  navListProps?: ListProps
-  navListSubheaderProps?: ListSubheaderProps
-  navListItemProps?: ListItemProps
-  navListItemButtonProps?: Omit<ListItemButtonProps, 'to' | 'onClick'>
-  navListItemIconProps?: ListItemIconProps
-  navListItemTextProps?: ListItemTextProps
-  navListSubitemButtonProps?: Pick<ListItemButtonProps, 'sx'>
-  navCollapseProps?: Omit<CollapseProps, 'in'>
-}
-
-function NavigationList({
-  navList,
-  expanded,
-  layoutState,
-  onToggleSubmenu,
-  dense,
-  navListProps,
-  navListSubheaderProps,
-  navListItemProps,
-  navListItemButtonProps,
-  navListItemIconProps,
-  navListItemTextProps,
-  navListSubitemButtonProps,
-  navCollapseProps,
-}: NavigationListProps) {
-  return (
-    <List
-      dense={dense}
-      {...navListProps}
-      data-collapsed={!expanded ? 'collapsed' : undefined}
-    >
-      {navList.title && (
-        <ListSubheader
-          data-subheader={navList.title}
-          data-collapsed={!expanded ? 'collapsed' : undefined}
-          {...navListSubheaderProps}
-          sx={{
-            lineHeight: dense ? '35px' : undefined,
-            '&[data-collapsed]': {
-              display: 'none',
-            },
-            ...(navListSubheaderProps?.sx as SxProps),
-          }}
-        >
-          {navList.title}
-        </ListSubheader>
-      )}
-      {navList.items.map((item, index) => {
-        const itemKey = getItemKey(item)
-        const expandedSubmenu = Boolean(layoutState.submenuOpen[itemKey])
-
-        return (
-          <Fragment key={`nav-item-${index}`}>
-            <NavListItem
-              item={item}
-              expanded={expanded}
-              layoutState={layoutState}
-              onToggleSubmenu={onToggleSubmenu}
-              navListItemProps={navListItemProps}
-              navListItemButtonProps={navListItemButtonProps}
-              navListItemIconProps={navListItemIconProps}
-              navListItemTextProps={navListItemTextProps}
-            />
-            {expanded && item.subitems?.length && (
-              <Collapse in={expandedSubmenu} {...navCollapseProps}>
-                <List dense={dense} component='div' disablePadding>
-                  {item.subitems.map((subitem, subIndex) => (
-                    <Fragment key={`nav-subitem-${subIndex}`}>
-                      <NavListItem
-                        item={subitem}
-                        expanded={expanded}
-                        layoutState={layoutState}
-                        onToggleSubmenu={onToggleSubmenu}
-                        navListItemProps={navListItemProps}
-                        navListItemButtonProps={navListItemButtonProps}
-                        navListItemIconProps={navListItemIconProps}
-                        navListItemTextProps={navListItemTextProps}
-                        sx={{
-                          pl: 4,
-                          ...(navListSubitemButtonProps?.sx as SxProps),
-                        }}
-                      />
-                    </Fragment>
-                  ))}
-                </List>
-              </Collapse>
-            )}
-          </Fragment>
-        )
-      })}
-    </List>
-  )
-}
-
-type SidebarContentProps = {
-  expanded: boolean
-  navLists: NavList[]
-  layoutState: LayoutState
-  onToggleSubmenu: (e: React.MouseEvent<HTMLDivElement>, item: NavItem) => void
-  onSidebarToggle: () => void
-  dense?: boolean
-  sidebarTogglePosition: 'top' | 'bottom'
-  navStartSlot?:
-    | React.ReactNode
-    | ((state: { expanded: boolean }) => React.ReactNode)
-  navEndSlot?:
-    | React.ReactNode
-    | ((state: { expanded: boolean }) => React.ReactNode)
-  navListProps?: ListProps
-  navListSubheaderProps?: ListSubheaderProps
-  navListItemProps?: ListItemProps
-  navListItemButtonProps?: Omit<ListItemButtonProps, 'to' | 'onClick'>
-  navListItemIconProps?: ListItemIconProps
-  navListItemTextProps?: ListItemTextProps
-  navListSubitemButtonProps?: Pick<ListItemButtonProps, 'sx'>
-  navCollapseProps?: Omit<CollapseProps, 'in'>
-  navDividerProps?: Omit<DividerProps, 'orientation' | 'flexItem'>
-  navSidebarToggleButtonProps?: Omit<IconButtonProps, 'onClick'>
-}
-
-function SidebarContent({
-  expanded,
-  navLists,
-  layoutState,
-  onToggleSubmenu,
-  onSidebarToggle,
-  dense,
-  sidebarTogglePosition,
-  navStartSlot,
-  navEndSlot,
-  navListProps,
-  navListSubheaderProps,
-  navListItemProps,
-  navListItemButtonProps,
-  navListItemIconProps,
-  navListItemTextProps,
-  navListSubitemButtonProps,
-  navCollapseProps,
-  navDividerProps,
-  navSidebarToggleButtonProps,
-}: SidebarContentProps) {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: 1,
-      }}
-    >
-      {sidebarTogglePosition === 'top' && (
-        <SidebarToggle
-          expanded={expanded}
-          dense={dense}
-          onToggle={onSidebarToggle}
-          navSidebarToggleButtonProps={navSidebarToggleButtonProps}
-        />
-      )}
-
-      <Box sx={{ flexGrow: 1, overflowY: 'auto', overflowX: 'hidden' }}>
-        {typeof navStartSlot === 'function'
-          ? navStartSlot({ expanded })
-          : navStartSlot}
-
-        {navLists.map((list, index) => (
-          <Fragment key={`nav-list-${index}`}>
-            <NavigationList
-              navList={list}
-              expanded={expanded}
-              layoutState={layoutState}
-              onToggleSubmenu={onToggleSubmenu}
-              dense={dense}
-              navListProps={navListProps}
-              navListSubheaderProps={navListSubheaderProps}
-              navListItemProps={navListItemProps}
-              navListItemButtonProps={navListItemButtonProps}
-              navListItemIconProps={navListItemIconProps}
-              navListItemTextProps={navListItemTextProps}
-              navListSubitemButtonProps={navListSubitemButtonProps}
-              navCollapseProps={navCollapseProps}
-            />
-            {index < navLists.length - 1 && <Divider {...navDividerProps} />}
-          </Fragment>
-        ))}
-
-        {typeof navEndSlot === 'function'
-          ? navEndSlot({ expanded })
-          : navEndSlot}
-      </Box>
-
-      {sidebarTogglePosition === 'bottom' && (
-        <SidebarToggle
-          expanded={expanded}
-          dense={dense}
-          onToggle={onSidebarToggle}
-          navSidebarToggleButtonProps={navSidebarToggleButtonProps}
-        />
-      )}
-    </Box>
-  )
-}
-
 // Main Layout Component
 export function Layout(props: LayoutProps) {
   const {
@@ -474,7 +120,7 @@ export function Layout(props: LayoutProps) {
 
   const layoutState = state ?? _layoutState
   const sidebarOpen = Boolean(layoutState.sidebarOpen)
-  const navLists = Array.isArray(navList) ? navList : [navList]
+  const navLists = useMemo(() => generateKeyedNavList(navList), [navList])
 
   const handleDrawerToggle = useCallback(() => {
     setMobileOpen(!mobileOpen)
@@ -491,6 +137,7 @@ export function Layout(props: LayoutProps) {
   const handleSidebarToggle = useCallback(() => {
     handleStateChange({
       ...layoutState,
+      submenuOpen: {}, // Reset submenu state when toggling sidebar
       sidebarOpen: !layoutState.sidebarOpen,
     })
   }, [layoutState, handleStateChange])
@@ -506,18 +153,15 @@ export function Layout(props: LayoutProps) {
   )
 
   const handleToggleSubmenu = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>, item: NavItem) => {
-      item?.onClick?.(e)
-      if (!e.isPropagationStopped()) {
-        const itemKey = getItemKey(item)
-        handleStateChange({
-          ...layoutState,
-          submenuOpen: {
-            ...layoutState.submenuOpen,
-            [itemKey]: !layoutState.submenuOpen[itemKey],
-          },
-        })
-      }
+    (item: KeyedNavItem) => {
+      const itemKey = item.key
+      handleStateChange({
+        ...layoutState,
+        submenuOpen: {
+          ...layoutState.submenuOpen,
+          [itemKey]: !layoutState.submenuOpen[itemKey],
+        },
+      })
     },
     [layoutState, handleStateChange]
   )
@@ -646,4 +290,19 @@ export function Layout(props: LayoutProps) {
       </Box>
     </Box>
   )
+}
+
+function generateKeyedNavList(navList: NavList | NavList[]): KeyedNavList[] {
+  const lists = Array.isArray(navList) ? navList : [navList]
+  return lists.map((list, i) => ({
+    items: list.items.map((item, j) => ({
+      ...item,
+      key: item.key ?? `item-${i}-${j}`,
+      subitems: item.subitems?.map((subitem, k) => ({
+        ...subitem,
+        key: item.key ?? `subitem-${i}-${j}-${k}`,
+      })),
+    })),
+    title: list.title,
+  }))
 }

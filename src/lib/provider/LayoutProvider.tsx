@@ -1,5 +1,5 @@
 import { PropsWithChildren, useState } from 'react'
-import { LayoutInitialState, LayoutState } from '../layout/Layout'
+import { LayoutInitialState, LayoutState } from '../layout/types'
 import { layoutContext } from './layoutContext'
 
 type AdminLayoutProviderProps = PropsWithChildren & {

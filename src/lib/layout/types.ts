@@ -1,5 +1,6 @@
 import { ValidateToPath } from '@tanstack/react-router'
 import { MouseEvent } from 'react'
+import { AppBarInitialState, AppBarState } from './AppBar'
 
 export type NavList = {
   items: NavItem[]
@@ -16,3 +17,22 @@ export type NavItem = {
 }
 
 export type NavSubitem = Omit<NavItem, 'subitems'>
+
+export type KeyedNavList = {
+  items: KeyedNavItem[]
+  title?: string
+}
+export type KeyedNavItem = Required<Pick<NavItem, 'key'>> & Omit<NavItem, 'key'>
+export type KeyedNavSubitem = Omit<KeyedNavItem, 'subitems'>
+
+export type LayoutState = {
+  sidebarOpen: boolean
+  appBarState: AppBarState
+  submenuOpen: Record<string, boolean>
+}
+
+export type LayoutInitialState = {
+  sidebarOpen?: boolean
+  appBarState?: AppBarInitialState
+  submenuOpen?: Record<string, boolean>
+}

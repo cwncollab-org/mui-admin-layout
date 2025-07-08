@@ -16,15 +16,37 @@ export const navList: NavList = {
     {
       icon: <Form />,
       label: 'Themed',
-      path: '/theme-example',
+      path: '/theme-example/example',
     },
     {
       icon: <Form />,
-      label: 'With Subitems',
+      label: 'With Submenu',
       subitems: [
         {
           icon: <Form />,
           label: 'Subitem 1',
+          path: '/layout-provider-example/with-submenu/subitem1',
+        },
+        {
+          icon: <Form />,
+          label: 'Subitem 2',
+          path: '/layout-provider-example/with-submenu/subitem2',
+        },
+      ],
+    },
+    {
+      icon: <Form />,
+      label: 'Themed With Submenu',
+      subitems: [
+        {
+          icon: <Form />,
+          label: 'Subitem 1',
+          path: '/theme-example/with-submenu/subitem1',
+        },
+        {
+          icon: <Form />,
+          label: 'Subitem 2',
+          path: '/theme-example/with-submenu/subitem2',
         },
       ],
     },

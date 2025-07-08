@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import { LayoutState } from '../layout/Layout'
+import { LayoutState } from '../layout/types'
 
 type LayoutContext = {
   mobileMaxWidth?: number

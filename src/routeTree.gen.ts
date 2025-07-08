@@ -17,10 +17,14 @@ import { Route as NotFoundImport } from './routes/not-found'
 import { Route as IndexImport } from './routes/index'
 import { Route as ThemeExampleLayoutImport } from './routes/theme-example/_layout'
 import { Route as LayoutProviderExampleLayoutImport } from './routes/layout-provider-example/_layout'
-import { Route as ThemeExampleLayoutIndexImport } from './routes/theme-example/_layout/index'
 import { Route as LayoutProviderExampleLayoutIndexImport } from './routes/layout-provider-example/_layout/index'
+import { Route as ThemeExampleLayoutExampleImport } from './routes/theme-example/_layout/example'
 import { Route as LayoutProviderExampleLayoutLongPageImport } from './routes/layout-provider-example/_layout/long-page'
 import { Route as LayoutProviderExampleLayoutControlImport } from './routes/layout-provider-example/_layout/control'
+import { Route as ThemeExampleLayoutWithSubmenuSubitem2Import } from './routes/theme-example/_layout/with-submenu/subitem2'
+import { Route as ThemeExampleLayoutWithSubmenuSubitem1Import } from './routes/theme-example/_layout/with-submenu/subitem1'
+import { Route as LayoutProviderExampleLayoutWithSubmenuSubitem2Import } from './routes/layout-provider-example/_layout/with-submenu/subitem2'
+import { Route as LayoutProviderExampleLayoutWithSubmenuSubitem1Import } from './routes/layout-provider-example/_layout/with-submenu/subitem1'
 
 // Create Virtual Routes
 
@@ -66,18 +70,18 @@ const LayoutProviderExampleLayoutRoute =
     getParentRoute: () => LayoutProviderExampleRoute,
   } as any)
 
-const ThemeExampleLayoutIndexRoute = ThemeExampleLayoutIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => ThemeExampleLayoutRoute,
-} as any)
-
 const LayoutProviderExampleLayoutIndexRoute =
   LayoutProviderExampleLayoutIndexImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => LayoutProviderExampleLayoutRoute,
   } as any)
+
+const ThemeExampleLayoutExampleRoute = ThemeExampleLayoutExampleImport.update({
+  id: '/example',
+  path: '/example',
+  getParentRoute: () => ThemeExampleLayoutRoute,
+} as any)
 
 const LayoutProviderExampleLayoutLongPageRoute =
   LayoutProviderExampleLayoutLongPageImport.update({
@@ -90,6 +94,34 @@ const LayoutProviderExampleLayoutControlRoute =
   LayoutProviderExampleLayoutControlImport.update({
     id: '/control',
     path: '/control',
+    getParentRoute: () => LayoutProviderExampleLayoutRoute,
+  } as any)
+
+const ThemeExampleLayoutWithSubmenuSubitem2Route =
+  ThemeExampleLayoutWithSubmenuSubitem2Import.update({
+    id: '/with-submenu/subitem2',
+    path: '/with-submenu/subitem2',
+    getParentRoute: () => ThemeExampleLayoutRoute,
+  } as any)
+
+const ThemeExampleLayoutWithSubmenuSubitem1Route =
+  ThemeExampleLayoutWithSubmenuSubitem1Import.update({
+    id: '/with-submenu/subitem1',
+    path: '/with-submenu/subitem1',
+    getParentRoute: () => ThemeExampleLayoutRoute,
+  } as any)
+
+const LayoutProviderExampleLayoutWithSubmenuSubitem2Route =
+  LayoutProviderExampleLayoutWithSubmenuSubitem2Import.update({
+    id: '/with-submenu/subitem2',
+    path: '/with-submenu/subitem2',
+    getParentRoute: () => LayoutProviderExampleLayoutRoute,
+  } as any)
+
+const LayoutProviderExampleLayoutWithSubmenuSubitem1Route =
+  LayoutProviderExampleLayoutWithSubmenuSubitem1Import.update({
+    id: '/with-submenu/subitem1',
+    path: '/with-submenu/subitem1',
     getParentRoute: () => LayoutProviderExampleLayoutRoute,
   } as any)
 
@@ -153,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProviderExampleLayoutLongPageImport
       parentRoute: typeof LayoutProviderExampleLayoutImport
     }
+    '/theme-example/_layout/example': {
+      id: '/theme-example/_layout/example'
+      path: '/example'
+      fullPath: '/theme-example/example'
+      preLoaderRoute: typeof ThemeExampleLayoutExampleImport
+      parentRoute: typeof ThemeExampleLayoutImport
+    }
     '/layout-provider-example/_layout/': {
       id: '/layout-provider-example/_layout/'
       path: '/'
@@ -160,11 +199,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProviderExampleLayoutIndexImport
       parentRoute: typeof LayoutProviderExampleLayoutImport
     }
-    '/theme-example/_layout/': {
-      id: '/theme-example/_layout/'
-      path: '/'
-      fullPath: '/theme-example/'
-      preLoaderRoute: typeof ThemeExampleLayoutIndexImport
+    '/layout-provider-example/_layout/with-submenu/subitem1': {
+      id: '/layout-provider-example/_layout/with-submenu/subitem1'
+      path: '/with-submenu/subitem1'
+      fullPath: '/layout-provider-example/with-submenu/subitem1'
+      preLoaderRoute: typeof LayoutProviderExampleLayoutWithSubmenuSubitem1Import
+      parentRoute: typeof LayoutProviderExampleLayoutImport
+    }
+    '/layout-provider-example/_layout/with-submenu/subitem2': {
+      id: '/layout-provider-example/_layout/with-submenu/subitem2'
+      path: '/with-submenu/subitem2'
+      fullPath: '/layout-provider-example/with-submenu/subitem2'
+      preLoaderRoute: typeof LayoutProviderExampleLayoutWithSubmenuSubitem2Import
+      parentRoute: typeof LayoutProviderExampleLayoutImport
+    }
+    '/theme-example/_layout/with-submenu/subitem1': {
+      id: '/theme-example/_layout/with-submenu/subitem1'
+      path: '/with-submenu/subitem1'
+      fullPath: '/theme-example/with-submenu/subitem1'
+      preLoaderRoute: typeof ThemeExampleLayoutWithSubmenuSubitem1Import
+      parentRoute: typeof ThemeExampleLayoutImport
+    }
+    '/theme-example/_layout/with-submenu/subitem2': {
+      id: '/theme-example/_layout/with-submenu/subitem2'
+      path: '/with-submenu/subitem2'
+      fullPath: '/theme-example/with-submenu/subitem2'
+      preLoaderRoute: typeof ThemeExampleLayoutWithSubmenuSubitem2Import
       parentRoute: typeof ThemeExampleLayoutImport
     }
   }
@@ -176,6 +236,8 @@ interface LayoutProviderExampleLayoutRouteChildren {
   LayoutProviderExampleLayoutControlRoute: typeof LayoutProviderExampleLayoutControlRoute
   LayoutProviderExampleLayoutLongPageRoute: typeof LayoutProviderExampleLayoutLongPageRoute
   LayoutProviderExampleLayoutIndexRoute: typeof LayoutProviderExampleLayoutIndexRoute
+  LayoutProviderExampleLayoutWithSubmenuSubitem1Route: typeof LayoutProviderExampleLayoutWithSubmenuSubitem1Route
+  LayoutProviderExampleLayoutWithSubmenuSubitem2Route: typeof LayoutProviderExampleLayoutWithSubmenuSubitem2Route
 }
 
 const LayoutProviderExampleLayoutRouteChildren: LayoutProviderExampleLayoutRouteChildren =
@@ -186,6 +248,10 @@ const LayoutProviderExampleLayoutRouteChildren: LayoutProviderExampleLayoutRoute
       LayoutProviderExampleLayoutLongPageRoute,
     LayoutProviderExampleLayoutIndexRoute:
       LayoutProviderExampleLayoutIndexRoute,
+    LayoutProviderExampleLayoutWithSubmenuSubitem1Route:
+      LayoutProviderExampleLayoutWithSubmenuSubitem1Route,
+    LayoutProviderExampleLayoutWithSubmenuSubitem2Route:
+      LayoutProviderExampleLayoutWithSubmenuSubitem2Route,
   }
 
 const LayoutProviderExampleLayoutRouteWithChildren =
@@ -208,11 +274,17 @@ const LayoutProviderExampleRouteWithChildren =
   )
 
 interface ThemeExampleLayoutRouteChildren {
-  ThemeExampleLayoutIndexRoute: typeof ThemeExampleLayoutIndexRoute
+  ThemeExampleLayoutExampleRoute: typeof ThemeExampleLayoutExampleRoute
+  ThemeExampleLayoutWithSubmenuSubitem1Route: typeof ThemeExampleLayoutWithSubmenuSubitem1Route
+  ThemeExampleLayoutWithSubmenuSubitem2Route: typeof ThemeExampleLayoutWithSubmenuSubitem2Route
 }
 
 const ThemeExampleLayoutRouteChildren: ThemeExampleLayoutRouteChildren = {
-  ThemeExampleLayoutIndexRoute: ThemeExampleLayoutIndexRoute,
+  ThemeExampleLayoutExampleRoute: ThemeExampleLayoutExampleRoute,
+  ThemeExampleLayoutWithSubmenuSubitem1Route:
+    ThemeExampleLayoutWithSubmenuSubitem1Route,
+  ThemeExampleLayoutWithSubmenuSubitem2Route:
+    ThemeExampleLayoutWithSubmenuSubitem2Route,
 }
 
 const ThemeExampleLayoutRouteWithChildren =
@@ -237,17 +309,26 @@ export interface FileRoutesByFullPath {
   '/theme-example': typeof ThemeExampleLayoutRouteWithChildren
   '/layout-provider-example/control': typeof LayoutProviderExampleLayoutControlRoute
   '/layout-provider-example/long-page': typeof LayoutProviderExampleLayoutLongPageRoute
+  '/theme-example/example': typeof ThemeExampleLayoutExampleRoute
   '/layout-provider-example/': typeof LayoutProviderExampleLayoutIndexRoute
-  '/theme-example/': typeof ThemeExampleLayoutIndexRoute
+  '/layout-provider-example/with-submenu/subitem1': typeof LayoutProviderExampleLayoutWithSubmenuSubitem1Route
+  '/layout-provider-example/with-submenu/subitem2': typeof LayoutProviderExampleLayoutWithSubmenuSubitem2Route
+  '/theme-example/with-submenu/subitem1': typeof ThemeExampleLayoutWithSubmenuSubitem1Route
+  '/theme-example/with-submenu/subitem2': typeof ThemeExampleLayoutWithSubmenuSubitem2Route
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/not-found': typeof NotFoundRoute
   '/layout-provider-example': typeof LayoutProviderExampleLayoutIndexRoute
-  '/theme-example': typeof ThemeExampleLayoutIndexRoute
+  '/theme-example': typeof ThemeExampleLayoutRouteWithChildren
   '/layout-provider-example/control': typeof LayoutProviderExampleLayoutControlRoute
   '/layout-provider-example/long-page': typeof LayoutProviderExampleLayoutLongPageRoute
+  '/theme-example/example': typeof ThemeExampleLayoutExampleRoute
+  '/layout-provider-example/with-submenu/subitem1': typeof LayoutProviderExampleLayoutWithSubmenuSubitem1Route
+  '/layout-provider-example/with-submenu/subitem2': typeof LayoutProviderExampleLayoutWithSubmenuSubitem2Route
+  '/theme-example/with-submenu/subitem1': typeof ThemeExampleLayoutWithSubmenuSubitem1Route
+  '/theme-example/with-submenu/subitem2': typeof ThemeExampleLayoutWithSubmenuSubitem2Route
 }
 
 export interface FileRoutesById {
@@ -260,8 +341,12 @@ export interface FileRoutesById {
   '/theme-example/_layout': typeof ThemeExampleLayoutRouteWithChildren
   '/layout-provider-example/_layout/control': typeof LayoutProviderExampleLayoutControlRoute
   '/layout-provider-example/_layout/long-page': typeof LayoutProviderExampleLayoutLongPageRoute
+  '/theme-example/_layout/example': typeof ThemeExampleLayoutExampleRoute
   '/layout-provider-example/_layout/': typeof LayoutProviderExampleLayoutIndexRoute
-  '/theme-example/_layout/': typeof ThemeExampleLayoutIndexRoute
+  '/layout-provider-example/_layout/with-submenu/subitem1': typeof LayoutProviderExampleLayoutWithSubmenuSubitem1Route
+  '/layout-provider-example/_layout/with-submenu/subitem2': typeof LayoutProviderExampleLayoutWithSubmenuSubitem2Route
+  '/theme-example/_layout/with-submenu/subitem1': typeof ThemeExampleLayoutWithSubmenuSubitem1Route
+  '/theme-example/_layout/with-submenu/subitem2': typeof ThemeExampleLayoutWithSubmenuSubitem2Route
 }
 
 export interface FileRouteTypes {
@@ -273,8 +358,12 @@ export interface FileRouteTypes {
     | '/theme-example'
     | '/layout-provider-example/control'
     | '/layout-provider-example/long-page'
+    | '/theme-example/example'
     | '/layout-provider-example/'
-    | '/theme-example/'
+    | '/layout-provider-example/with-submenu/subitem1'
+    | '/layout-provider-example/with-submenu/subitem2'
+    | '/theme-example/with-submenu/subitem1'
+    | '/theme-example/with-submenu/subitem2'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -283,6 +372,11 @@ export interface FileRouteTypes {
     | '/theme-example'
     | '/layout-provider-example/control'
     | '/layout-provider-example/long-page'
+    | '/theme-example/example'
+    | '/layout-provider-example/with-submenu/subitem1'
+    | '/layout-provider-example/with-submenu/subitem2'
+    | '/theme-example/with-submenu/subitem1'
+    | '/theme-example/with-submenu/subitem2'
   id:
     | '__root__'
     | '/'
@@ -293,8 +387,12 @@ export interface FileRouteTypes {
     | '/theme-example/_layout'
     | '/layout-provider-example/_layout/control'
     | '/layout-provider-example/_layout/long-page'
+    | '/theme-example/_layout/example'
     | '/layout-provider-example/_layout/'
-    | '/theme-example/_layout/'
+    | '/layout-provider-example/_layout/with-submenu/subitem1'
+    | '/layout-provider-example/_layout/with-submenu/subitem2'
+    | '/theme-example/_layout/with-submenu/subitem1'
+    | '/theme-example/_layout/with-submenu/subitem2'
   fileRoutesById: FileRoutesById
 }
 
@@ -346,7 +444,9 @@ export const routeTree = rootRoute
       "children": [
         "/layout-provider-example/_layout/control",
         "/layout-provider-example/_layout/long-page",
-        "/layout-provider-example/_layout/"
+        "/layout-provider-example/_layout/",
+        "/layout-provider-example/_layout/with-submenu/subitem1",
+        "/layout-provider-example/_layout/with-submenu/subitem2"
       ]
     },
     "/theme-example": {
@@ -359,7 +459,9 @@ export const routeTree = rootRoute
       "filePath": "theme-example/_layout.tsx",
       "parent": "/theme-example",
       "children": [
-        "/theme-example/_layout/"
+        "/theme-example/_layout/example",
+        "/theme-example/_layout/with-submenu/subitem1",
+        "/theme-example/_layout/with-submenu/subitem2"
       ]
     },
     "/layout-provider-example/_layout/control": {
@@ -370,12 +472,28 @@ export const routeTree = rootRoute
       "filePath": "layout-provider-example/_layout/long-page.tsx",
       "parent": "/layout-provider-example/_layout"
     },
+    "/theme-example/_layout/example": {
+      "filePath": "theme-example/_layout/example.tsx",
+      "parent": "/theme-example/_layout"
+    },
     "/layout-provider-example/_layout/": {
       "filePath": "layout-provider-example/_layout/index.tsx",
       "parent": "/layout-provider-example/_layout"
     },
-    "/theme-example/_layout/": {
-      "filePath": "theme-example/_layout/index.tsx",
+    "/layout-provider-example/_layout/with-submenu/subitem1": {
+      "filePath": "layout-provider-example/_layout/with-submenu/subitem1.tsx",
+      "parent": "/layout-provider-example/_layout"
+    },
+    "/layout-provider-example/_layout/with-submenu/subitem2": {
+      "filePath": "layout-provider-example/_layout/with-submenu/subitem2.tsx",
+      "parent": "/layout-provider-example/_layout"
+    },
+    "/theme-example/_layout/with-submenu/subitem1": {
+      "filePath": "theme-example/_layout/with-submenu/subitem1.tsx",
+      "parent": "/theme-example/_layout"
+    },
+    "/theme-example/_layout/with-submenu/subitem2": {
+      "filePath": "theme-example/_layout/with-submenu/subitem2.tsx",
       "parent": "/theme-example/_layout"
     }
   }
