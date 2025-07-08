@@ -12,7 +12,6 @@ import {
   ListSubheader,
   ListSubheaderProps,
   Menu,
-  MenuItem,
   SxProps,
 } from '@mui/material'
 import { Fragment, useRef } from 'react'
