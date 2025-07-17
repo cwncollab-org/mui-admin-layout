@@ -23,7 +23,7 @@ export type SidebarContentProps = {
   onToggleSubmenu: (item: KeyedNavItem) => void
   onSidebarToggle: () => void
   dense?: boolean
-  sidebarTogglePosition: 'top' | 'bottom'
+  sidebarTogglePosition: 'top' | 'bottom' | 'none'
   navStartSlot?:
     | React.ReactNode
     | ((state: { expanded: boolean }) => React.ReactNode)

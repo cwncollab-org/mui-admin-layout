@@ -25,7 +25,7 @@ import {
   LayoutState,
   NavList,
 } from './types'
-import { SidebarContent } from './SidebarContent'
+import { SidebarContent, SidebarContentProps } from './SidebarContent'
 
 const DEFAULT_DRAWER_WIDTH = 240
 const DEFAULT_COLLAPSED_DRAWER_WIDTH = 64
@@ -44,7 +44,7 @@ export type LayoutProps = PropsWithChildren & {
   dense?: boolean
   drawerWidth?: number
   collapsedDrawerWidth?: number
-  sidebarTogglePosition?: 'top' | 'bottom'
+  sidebarTogglePosition?: SidebarContentProps['sidebarTogglePosition']
   enableAppBar?: boolean
   menuItems?: React.ReactNode[]
   navStartSlot?:
