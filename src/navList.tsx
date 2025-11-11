@@ -36,6 +36,18 @@ export const navList: NavList = {
     },
     {
       icon: <Form />,
+      label: 'With Param 1',
+      path: '/layout-provider-example/with-params/$id',
+      params: { id: '1' },
+    },
+    {
+      icon: <Form />,
+      label: 'With Param 2',
+      path: '/layout-provider-example/with-params/$id',
+      params: { id: '2' },
+    },
+    {
+      icon: <Form />,
       label: 'Themed With Submenu',
       subitems: [
         {

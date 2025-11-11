@@ -25,6 +25,7 @@ import { Route as ThemeExampleLayoutWithSubmenuSubitem2Import } from './routes/t
 import { Route as ThemeExampleLayoutWithSubmenuSubitem1Import } from './routes/theme-example/_layout/with-submenu/subitem1'
 import { Route as LayoutProviderExampleLayoutWithSubmenuSubitem2Import } from './routes/layout-provider-example/_layout/with-submenu/subitem2'
 import { Route as LayoutProviderExampleLayoutWithSubmenuSubitem1Import } from './routes/layout-provider-example/_layout/with-submenu/subitem1'
+import { Route as LayoutProviderExampleLayoutWithParamsIdIndexImport } from './routes/layout-provider-example/_layout/with-params/$id/index'
 
 // Create Virtual Routes
 
@@ -122,6 +123,13 @@ const LayoutProviderExampleLayoutWithSubmenuSubitem1Route =
   LayoutProviderExampleLayoutWithSubmenuSubitem1Import.update({
     id: '/with-submenu/subitem1',
     path: '/with-submenu/subitem1',
+    getParentRoute: () => LayoutProviderExampleLayoutRoute,
+  } as any)
+
+const LayoutProviderExampleLayoutWithParamsIdIndexRoute =
+  LayoutProviderExampleLayoutWithParamsIdIndexImport.update({
+    id: '/with-params/$id/',
+    path: '/with-params/$id/',
     getParentRoute: () => LayoutProviderExampleLayoutRoute,
   } as any)
 
@@ -227,6 +235,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ThemeExampleLayoutWithSubmenuSubitem2Import
       parentRoute: typeof ThemeExampleLayoutImport
     }
+    '/layout-provider-example/_layout/with-params/$id/': {
+      id: '/layout-provider-example/_layout/with-params/$id/'
+      path: '/with-params/$id'
+      fullPath: '/layout-provider-example/with-params/$id'
+      preLoaderRoute: typeof LayoutProviderExampleLayoutWithParamsIdIndexImport
+      parentRoute: typeof LayoutProviderExampleLayoutImport
+    }
   }
 }
 
@@ -238,6 +253,7 @@ interface LayoutProviderExampleLayoutRouteChildren {
   LayoutProviderExampleLayoutIndexRoute: typeof LayoutProviderExampleLayoutIndexRoute
   LayoutProviderExampleLayoutWithSubmenuSubitem1Route: typeof LayoutProviderExampleLayoutWithSubmenuSubitem1Route
   LayoutProviderExampleLayoutWithSubmenuSubitem2Route: typeof LayoutProviderExampleLayoutWithSubmenuSubitem2Route
+  LayoutProviderExampleLayoutWithParamsIdIndexRoute: typeof LayoutProviderExampleLayoutWithParamsIdIndexRoute
 }
 
 const LayoutProviderExampleLayoutRouteChildren: LayoutProviderExampleLayoutRouteChildren =
@@ -252,6 +268,8 @@ const LayoutProviderExampleLayoutRouteChildren: LayoutProviderExampleLayoutRoute
       LayoutProviderExampleLayoutWithSubmenuSubitem1Route,
     LayoutProviderExampleLayoutWithSubmenuSubitem2Route:
       LayoutProviderExampleLayoutWithSubmenuSubitem2Route,
+    LayoutProviderExampleLayoutWithParamsIdIndexRoute:
+      LayoutProviderExampleLayoutWithParamsIdIndexRoute,
   }
 
 const LayoutProviderExampleLayoutRouteWithChildren =
@@ -315,6 +333,7 @@ export interface FileRoutesByFullPath {
   '/layout-provider-example/with-submenu/subitem2': typeof LayoutProviderExampleLayoutWithSubmenuSubitem2Route
   '/theme-example/with-submenu/subitem1': typeof ThemeExampleLayoutWithSubmenuSubitem1Route
   '/theme-example/with-submenu/subitem2': typeof ThemeExampleLayoutWithSubmenuSubitem2Route
+  '/layout-provider-example/with-params/$id': typeof LayoutProviderExampleLayoutWithParamsIdIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -329,6 +348,7 @@ export interface FileRoutesByTo {
   '/layout-provider-example/with-submenu/subitem2': typeof LayoutProviderExampleLayoutWithSubmenuSubitem2Route
   '/theme-example/with-submenu/subitem1': typeof ThemeExampleLayoutWithSubmenuSubitem1Route
   '/theme-example/with-submenu/subitem2': typeof ThemeExampleLayoutWithSubmenuSubitem2Route
+  '/layout-provider-example/with-params/$id': typeof LayoutProviderExampleLayoutWithParamsIdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -347,6 +367,7 @@ export interface FileRoutesById {
   '/layout-provider-example/_layout/with-submenu/subitem2': typeof LayoutProviderExampleLayoutWithSubmenuSubitem2Route
   '/theme-example/_layout/with-submenu/subitem1': typeof ThemeExampleLayoutWithSubmenuSubitem1Route
   '/theme-example/_layout/with-submenu/subitem2': typeof ThemeExampleLayoutWithSubmenuSubitem2Route
+  '/layout-provider-example/_layout/with-params/$id/': typeof LayoutProviderExampleLayoutWithParamsIdIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -364,6 +385,7 @@ export interface FileRouteTypes {
     | '/layout-provider-example/with-submenu/subitem2'
     | '/theme-example/with-submenu/subitem1'
     | '/theme-example/with-submenu/subitem2'
+    | '/layout-provider-example/with-params/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -377,6 +399,7 @@ export interface FileRouteTypes {
     | '/layout-provider-example/with-submenu/subitem2'
     | '/theme-example/with-submenu/subitem1'
     | '/theme-example/with-submenu/subitem2'
+    | '/layout-provider-example/with-params/$id'
   id:
     | '__root__'
     | '/'
@@ -393,6 +416,7 @@ export interface FileRouteTypes {
     | '/layout-provider-example/_layout/with-submenu/subitem2'
     | '/theme-example/_layout/with-submenu/subitem1'
     | '/theme-example/_layout/with-submenu/subitem2'
+    | '/layout-provider-example/_layout/with-params/$id/'
   fileRoutesById: FileRoutesById
 }
 
@@ -446,7 +470,8 @@ export const routeTree = rootRoute
         "/layout-provider-example/_layout/long-page",
         "/layout-provider-example/_layout/",
         "/layout-provider-example/_layout/with-submenu/subitem1",
-        "/layout-provider-example/_layout/with-submenu/subitem2"
+        "/layout-provider-example/_layout/with-submenu/subitem2",
+        "/layout-provider-example/_layout/with-params/$id/"
       ]
     },
     "/theme-example": {
@@ -495,6 +520,10 @@ export const routeTree = rootRoute
     "/theme-example/_layout/with-submenu/subitem2": {
       "filePath": "theme-example/_layout/with-submenu/subitem2.tsx",
       "parent": "/theme-example/_layout"
+    },
+    "/layout-provider-example/_layout/with-params/$id/": {
+      "filePath": "layout-provider-example/_layout/with-params/$id/index.tsx",
+      "parent": "/layout-provider-example/_layout"
     }
   }
 }

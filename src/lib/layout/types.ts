@@ -12,6 +12,7 @@ export type NavItem = {
   icon?: React.ReactNode
   label: string
   path?: ValidateToPath | (string & {})
+  params?: Record<string, string | number>
   onClick?: (evt: MouseEvent) => void
   subitems?: NavSubitem[]
 }

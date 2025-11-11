@@ -9,6 +9,7 @@ import { forwardRef } from 'react'
 
 export type NavListItemButtonProps = ListItemButtonProps & {
   to?: ValidateToPath | (string & {})
+  params?: Record<string, string | number>
 }
 
 type MUIListItemButtonLinkProps = Omit<ListItemButtonProps<'a'>, 'component'>
@@ -38,6 +39,7 @@ export function NavListItemButton(props: NavListItemButtonProps) {
       <CustomListItemButtonLink
         {...(rest as CustomListItemButtonLinkProps)}
         to={to}
+        params={props.params}
       >
         {children}
       </CustomListItemButtonLink>
