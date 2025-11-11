@@ -4,6 +4,7 @@ import {
   Collapse,
   CollapseProps,
   List,
+  ListItem,
   ListItemButtonProps,
   ListItemIconProps,
   ListItemProps,
@@ -12,6 +13,7 @@ import {
   ListSubheader,
   ListSubheaderProps,
   Menu,
+  Skeleton,
   SxProps,
 } from '@mui/material'
 import { Fragment, useRef } from 'react'
@@ -72,23 +74,31 @@ export function NavList({
           {navList.title}
         </ListSubheader>
       )}
-      {navList.items.map((item, index) => (
-        <NavListItemWithSubmenu
-          key={`nav-item-${index}`}
-          item={item}
-          index={index}
-          expanded={expanded}
-          dense={dense}
-          layoutState={layoutState}
-          onToggleSubmenu={onToggleSubmenu}
-          navListItemProps={navListItemProps}
-          navListItemButtonProps={navListItemButtonProps}
-          navListItemIconProps={navListItemIconProps}
-          navListItemTextProps={navListItemTextProps}
-          navListSubitemButtonProps={navListSubitemButtonProps}
-          navCollapseProps={navCollapseProps}
-        />
-      ))}
+      {!('isPlaceholder' in navList)
+        ? navList.items.map((item, index) => (
+            <NavListItemWithSubmenu
+              key={`nav-item-${index}`}
+              item={item}
+              index={index}
+              expanded={expanded}
+              dense={dense}
+              layoutState={layoutState}
+              onToggleSubmenu={onToggleSubmenu}
+              navListItemProps={navListItemProps}
+              navListItemButtonProps={navListItemButtonProps}
+              navListItemIconProps={navListItemIconProps}
+              navListItemTextProps={navListItemTextProps}
+              navListSubitemButtonProps={navListSubitemButtonProps}
+              navCollapseProps={navCollapseProps}
+            />
+          ))
+        : [1, 2, 3].map((_, index) => (
+            <Fragment key={`nav-placeholder-${index}`}>
+              <ListItem>
+                <Skeleton variant='text' sx={{ width: 1 }} />
+              </ListItem>
+            </Fragment>
+          ))}
     </List>
   )
 }

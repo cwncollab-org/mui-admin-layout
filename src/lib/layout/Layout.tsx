@@ -295,14 +295,17 @@ export function Layout(props: LayoutProps) {
 function generateKeyedNavList(navList: NavList | NavList[]): KeyedNavList[] {
   const lists = Array.isArray(navList) ? navList : [navList]
   return lists.map((list, i) => ({
-    items: list.items.map((item, j) => ({
-      ...item,
-      key: item.key ?? `item-${i}-${j}`,
-      subitems: item.subitems?.map((subitem, k) => ({
-        ...subitem,
-        key: item.key ?? `subitem-${i}-${j}-${k}`,
-      })),
-    })),
+    items: !('isPlaceholder' in list)
+      ? list.items.map((item, j) => ({
+          ...item,
+          key: item.key ?? `item-${i}-${j}`,
+          subitems: item.subitems?.map((subitem, k) => ({
+            ...subitem,
+            key: item.key ?? `subitem-${i}-${j}-${k}`,
+          })),
+        }))
+      : [],
     title: list.title,
+    ...('isPlaceholder' in list ? { isPlaceholder: list.isPlaceholder } : {}),
   }))
 }

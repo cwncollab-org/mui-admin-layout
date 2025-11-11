@@ -71,6 +71,10 @@ export const grouppedNavList: NavList[] = [
     items: [...navList.items],
   },
   {
+    title: 'Placeholder',
+    isPlaceholder: true,
+  },
+  {
     title: 'Group2',
     items: [
       {
