@@ -32,14 +32,14 @@ const CustomListItemButtonLink: LinkComponent<
 }
 
 export function NavListItemButton(props: NavListItemButtonProps) {
-  const { to, children, ...rest } = props
+  const { to, params, children, ...rest } = props
 
   if (to) {
     return (
       <CustomListItemButtonLink
         {...(rest as CustomListItemButtonLinkProps)}
         to={to}
-        params={props.params}
+        params={params as any}
       >
         {children}
       </CustomListItemButtonLink>
