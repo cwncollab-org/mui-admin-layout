@@ -29,6 +29,7 @@ export type NavItem = {
   label: string
   path?: ValidateToPath | (string & {})
   params?: Record<string, string | number>
+  target?: '_blank' | '_self' | '_parent' | '_top' | (string & {})
   onClick?: (evt: MouseEvent) => void
   subitems?: NavSubitem[]
 } & NavItemIcon

@@ -60,6 +60,7 @@ export const NavListItem = forwardRef<HTMLDivElement, NavListItemProps>(
             ref={ref}
             to={item.path}
             params={item.params}
+            target={item.target}
             onClick={onClick}
             data-collapsed={!expanded ? 'collapsed' : undefined}
             sx={{

@@ -18,15 +18,9 @@ import {
 } from '@mui/material'
 import { PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { AppBar, AppBarProps } from './AppBar'
-import {
-  KeyedNavItem,
-  KeyedNavList,
-  LayoutInitialState,
-  LayoutState,
-  NavList,
-} from './types'
+import { KeyedNavItem, LayoutInitialState, LayoutState, NavList } from './types'
 import { SidebarContent, SidebarContentProps } from './SidebarContent'
-import { isPlaceholderNavList } from './utils'
+import { generateKeyedNavList } from './utils'
 
 const DEFAULT_DRAWER_WIDTH = 240
 const DEFAULT_COLLAPSED_DRAWER_WIDTH = 64
@@ -291,29 +285,4 @@ export function Layout(props: LayoutProps) {
       </Box>
     </Box>
   )
-}
-
-function generateKeyedNavList(navList: NavList | NavList[]): KeyedNavList[] {
-  const lists = Array.isArray(navList) ? navList : [navList]
-
-  return lists.map((list, i) => {
-    if (isPlaceholderNavList(list)) {
-      return {
-        isPlaceholder: true,
-        title: list.title,
-      }
-    }
-
-    return {
-      title: list.title,
-      items: list.items.map((item, j) => ({
-        ...item,
-        key: item.key ?? `item-${i}-${j}`,
-        subitems: item.subitems?.map((subitem, k) => ({
-          ...subitem,
-          key: item.key ?? `subitem-${i}-${j}-${k}`,
-        })),
-      })),
-    }
-  })
 }

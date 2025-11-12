@@ -84,8 +84,9 @@ export const grouppedNavList: NavList[] = [
     items: [
       {
         icon: <Form />,
-        label: 'Not Found',
-        path: '/not-found',
+        label: 'Repository',
+        path: 'https://github.com/cwncollab-org/mui-admin-layout',
+        target: '_blank',
       },
       {
         icon: <Form />,
