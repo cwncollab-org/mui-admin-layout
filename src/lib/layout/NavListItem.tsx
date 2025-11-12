@@ -79,7 +79,7 @@ export const NavListItem = forwardRef<HTMLDivElement, NavListItemProps>(
                 ...navListItemIconProps?.sx,
               }}
             >
-              {item.icon}
+              {'icon' in item ? item.icon : <item.Icon {...item.iconProps} />}
             </ListItemIcon>
 
             <ListItemText

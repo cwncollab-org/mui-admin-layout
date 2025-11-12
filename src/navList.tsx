@@ -4,7 +4,8 @@ import Form from '@mui/icons-material/Article'
 export const navList: NavList = {
   items: [
     {
-      icon: <Form />,
+      Icon: Form,
+      iconProps: { color: 'primary' },
       label: 'Layout Provider Example',
       path: '/layout-provider-example/control',
     },
@@ -23,7 +24,7 @@ export const navList: NavList = {
       label: 'With Submenu',
       subitems: [
         {
-          icon: <Form />,
+          Icon: Form,
           label: 'Subitem 1',
           path: '/layout-provider-example/with-submenu/subitem1',
         },
