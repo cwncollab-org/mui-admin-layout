@@ -11,6 +11,6 @@ export {
   type NavItem,
   type NavList,
   type PlaceholderNavList,
-  isPlaceholderNavList,
 } from './layout'
+export { isPlaceholderNavList } from './layout/utils'
 export { NotFoundPage } from './pages/NotFoundPage'
