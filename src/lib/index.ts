@@ -6,5 +6,11 @@ export {
   useLayoutState,
   useLayoutStateValue,
 } from './hooks'
-export { AppBar, type NavItem, type NavList } from './layout'
+export {
+  AppBar,
+  type NavItem,
+  type NavList,
+  type PlaceholderNavList,
+  isPlaceholderNavList,
+} from './layout'
 export { NotFoundPage } from './pages/NotFoundPage'
