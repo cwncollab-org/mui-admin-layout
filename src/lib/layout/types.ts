@@ -2,15 +2,17 @@ import { ValidateToPath } from '@tanstack/react-router'
 import { MouseEvent } from 'react'
 import { AppBarInitialState, AppBarState } from './AppBar'
 
+export type PlaceholderNavList = {
+  isPlaceholder: true
+  title?: string
+}
+
 export type NavList =
   | {
       items: NavItem[]
       title?: string
     }
-  | {
-      isPlaceholder: true
-      title?: string
-    }
+  | PlaceholderNavList
 
 export type NavItem = {
   key?: string

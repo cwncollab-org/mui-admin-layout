@@ -26,6 +26,7 @@ import {
   NavList,
 } from './types'
 import { SidebarContent, SidebarContentProps } from './SidebarContent'
+import { isPlaceholderNavList } from './utils'
 
 const DEFAULT_DRAWER_WIDTH = 240
 const DEFAULT_COLLAPSED_DRAWER_WIDTH = 64
@@ -294,18 +295,25 @@ export function Layout(props: LayoutProps) {
 
 function generateKeyedNavList(navList: NavList | NavList[]): KeyedNavList[] {
   const lists = Array.isArray(navList) ? navList : [navList]
-  return lists.map((list, i) => ({
-    items: !('isPlaceholder' in list)
-      ? list.items.map((item, j) => ({
-          ...item,
-          key: item.key ?? `item-${i}-${j}`,
-          subitems: item.subitems?.map((subitem, k) => ({
-            ...subitem,
-            key: item.key ?? `subitem-${i}-${j}-${k}`,
-          })),
-        }))
-      : [],
-    title: list.title,
-    ...('isPlaceholder' in list ? { isPlaceholder: list.isPlaceholder } : {}),
-  }))
+
+  return lists.map((list, i) => {
+    if (isPlaceholderNavList(list)) {
+      return {
+        isPlaceholder: true,
+        title: list.title,
+      }
+    }
+
+    return {
+      title: list.title,
+      items: list.items.map((item, j) => ({
+        ...item,
+        key: item.key ?? `item-${i}-${j}`,
+        subitems: item.subitems?.map((subitem, k) => ({
+          ...subitem,
+          key: item.key ?? `subitem-${i}-${j}-${k}`,
+        })),
+      })),
+    }
+  })
 }

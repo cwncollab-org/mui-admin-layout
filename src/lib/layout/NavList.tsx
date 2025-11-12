@@ -20,6 +20,7 @@ import { Fragment, useRef } from 'react'
 import { KeyedNavItem, KeyedNavList, LayoutState } from './types'
 import { NavListItem } from './NavListItem'
 import { NavMenuItem } from './NavMenuItem'
+import { isPlaceholderNavList } from './utils'
 
 export type NavListProps = {
   navList: KeyedNavList
@@ -58,24 +59,25 @@ export function NavList({
       {...navListProps}
       data-collapsed={!expanded ? 'collapsed' : undefined}
     >
-      {navList.title && (
-        <ListSubheader
-          data-subheader={navList.title}
-          data-collapsed={!expanded ? 'collapsed' : undefined}
-          {...navListSubheaderProps}
-          sx={{
-            lineHeight: dense ? '35px' : undefined,
-            '&[data-collapsed]': {
-              display: 'none',
-            },
-            ...(navListSubheaderProps?.sx as SxProps),
-          }}
-        >
-          {navList.title}
-        </ListSubheader>
-      )}
-      {!('isPlaceholder' in navList)
-        ? navList.items.map((item, index) => (
+      {!isPlaceholderNavList(navList) ? (
+        <Fragment>
+          {navList.title && (
+            <ListSubheader
+              data-subheader={navList.title}
+              data-collapsed={!expanded ? 'collapsed' : undefined}
+              {...navListSubheaderProps}
+              sx={{
+                lineHeight: dense ? '35px' : undefined,
+                '&[data-collapsed]': {
+                  display: 'none',
+                },
+                ...(navListSubheaderProps?.sx as SxProps),
+              }}
+            >
+              {navList.title}
+            </ListSubheader>
+          )}
+          {navList.items.map((item, index) => (
             <NavListItemWithSubmenu
               key={`nav-item-${index}`}
               item={item}
@@ -91,14 +93,35 @@ export function NavList({
               navListSubitemButtonProps={navListSubitemButtonProps}
               navCollapseProps={navCollapseProps}
             />
-          ))
-        : [1, 2, 3].map((_, index) => (
+          ))}
+        </Fragment>
+      ) : (
+        <Fragment>
+          {navList.title && (
+            <ListSubheader
+              data-subheader={navList.title}
+              data-collapsed={!expanded ? 'collapsed' : undefined}
+              {...navListSubheaderProps}
+              sx={{
+                lineHeight: dense ? '35px' : undefined,
+                '&[data-collapsed]': {
+                  display: 'none',
+                },
+                ...(navListSubheaderProps?.sx as SxProps),
+              }}
+            >
+              <Skeleton variant='text' sx={{ width: 1 }} />
+            </ListSubheader>
+          )}
+          {[1, 2, 3].map((_, index) => (
             <Fragment key={`nav-placeholder-${index}`}>
               <ListItem>
                 <Skeleton variant='text' sx={{ width: 1 }} />
               </ListItem>
             </Fragment>
           ))}
+        </Fragment>
+      )}
     </List>
   )
 }
