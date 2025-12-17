@@ -185,11 +185,22 @@ export function Layout(props: LayoutProps) {
   const { sx: mainSx, ...mainRest } = mainProps ?? {}
 
   return (
-    <Box sx={{ display: 'flex', height: '100vh', ...sx }}>
+    <Box
+      sx={{
+        display: 'flex',
+        height: '100vh',
+        '@media print': { height: 'auto' },
+        ...sx,
+      }}
+    >
       {enableAppBar && (
         <AppBar
           dense={dense}
           {...appBarProps}
+          sx={{
+            ...(appBarProps?.sx as object),
+            displayPrint: 'none',
+          }}
           title={title}
           sidebarOpen={sidebarOpen}
           drawerWidth={drawerWidth}
@@ -207,6 +218,7 @@ export function Layout(props: LayoutProps) {
           width: { sm: sidebarOpen ? drawerWidth : collapsedDrawerWidth },
           flexShrink: { sm: 0 },
           transition: 'width 0.2s',
+          displayPrint: 'none',
         }}
       >
         <Drawer
@@ -265,6 +277,7 @@ export function Layout(props: LayoutProps) {
               sidebarOpen ? drawerWidth : collapsedDrawerWidth
             }px)`,
           },
+          '@media print': { width: '100%' },
           transition: 'width 0.2s',
           overflowX: 'hidden',
         }}
@@ -272,13 +285,18 @@ export function Layout(props: LayoutProps) {
         {enableAppBar && (
           <Toolbar
             variant={dense ? 'dense' : 'regular'}
-            sx={{ flexShrink: 0 }}
+            sx={{ flexShrink: 0, displayPrint: 'none' }}
           />
         )}
         <Box
           component='main'
           {...mainRest}
-          sx={{ flexGrow: 1, overflowY: 'auto', ...mainSx }}
+          sx={{
+            flexGrow: 1,
+            overflowY: 'auto',
+            ...mainSx,
+            '@media print': { overflow: 'visible' },
+          }}
         >
           {children}
         </Box>
