@@ -1,13 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute(
-  '/theme-example/_layout/with-submenu/subitem1',
+  '/theme-example/_layout/with-submenu/subitem1/b',
 )({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  return (
-    <div>Hello "/layout-provider-example/_layout/with-submenu/subitem1"!</div>
-  )
+  return <div>Hello "/theme-example/_layout/with-submenu/_subitem1/b"!</div>
 }

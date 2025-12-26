@@ -86,14 +86,14 @@ function RouteComponent() {
       }}
       navListItemButtonProps={{
         sx: {
-          '&.active': {
+          '&.Mui-selected': {
             position: 'relative',
             color: '#4268B3',
           },
-          '&.active .MuiListItemIcon-root': {
+          '&.Mui-selected .MuiListItemIcon-root': {
             color: '#4268B3',
           },
-          '&.active::before': {
+          '&.Mui-selected::before': {
             content: '""',
             position: 'absolute',
             left: 4,
