@@ -53,8 +53,15 @@ export const navList: NavList = {
       subitems: [
         {
           icon: <Form />,
-          label: 'Subitem 1',
-          path: '/theme-example/with-submenu/subitem1',
+          label: 'Subitem 1a',
+          path: '/theme-example/with-submenu/subitem1/a',
+          activePath: '/theme-example/with-submenu/subitem1',
+        },
+        {
+          icon: <Form />,
+          label: 'Subitem 1b',
+          path: '/theme-example/with-submenu/subitem1/b',
+          activePath: '/theme-example/with-submenu/subitem1',
         },
         {
           icon: <Form />,
