@@ -23,7 +23,7 @@ export function NotFoundPage() {
         <Typography variant='h4' component='h2' gutterBottom>
           Page Not Found
         </Typography>
-        <Typography variant='body1' color='text.secondary' paragraph>
+        <Typography variant='body1' color='text.secondary'>
           The page you are looking for might have been removed, had its name
           changed, or is temporarily unavailable.
         </Typography>

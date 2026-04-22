@@ -1,7 +1,7 @@
 {
   "name": "@cwncollab-org/mui-admin-layout",
   "private": false,
-  "version": "0.10.0",
+  "version": "0.11.0",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -28,21 +28,16 @@
     "test:coverage": "jest --coverage"
   },
   "peerDependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@mui/material": "^7.0.2",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  },
-  "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@mui/material": "^7.0.2",
-    "@tanstack/react-router": "^1.120.5"
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.0",
+    "@mui/material": "9.0.0",
+    "@tanstack/react-router": "1.168.23",
+    "react": "19.2.5",
+    "react-dom": "19.2.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
-    "@mui/icons-material": "^7.1.0",
+    "@mui/icons-material": "^9.0.0",
     "@tanstack/react-router-devtools": "^1.116.0",
     "@tanstack/router-vite-plugin": "^1.116.1",
     "@testing-library/jest-dom": "^6.6.3",
