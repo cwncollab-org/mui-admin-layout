@@ -7,6 +7,8 @@ A Material-UI based admin layout component library for React applications.
 
 ## Installation
 
+This package is published to AWS CodeArtifact. Make sure your npm config already maps the `@cwncollab-org` scope to the `cwncollab` CodeArtifact repository before installing.
+
 ```bash
 npm install @cwncollab-org/mui-admin-layout
 # or
@@ -14,6 +16,62 @@ yarn add @cwncollab-org/mui-admin-layout
 # or
 pnpm add @cwncollab-org/mui-admin-layout
 ```
+
+## Publish
+
+This package is published manually to AWS CodeArtifact.
+
+1. Configure AWS CLI v2 locally with credentials that can publish to CodeArtifact.
+2. Use Node 20 or 22 LTS when validating or publishing the package.
+3. Bump the version in `package.json`.
+4. Validate the package contents:
+
+```bash
+npm run build
+npm pack --dry-run
+```
+
+5. Publish the package:
+
+```bash
+npm run publish:aws
+```
+
+If you use a non-default AWS CLI profile:
+
+```bash
+AWS_PROFILE=cwncollab-publish npm run publish:aws
+```
+
+On Windows PowerShell:
+
+```powershell
+$env:AWS_PROFILE = "cwncollab-publish"
+npm run publish:aws
+```
+
+Pass extra publish flags after `--` if needed:
+
+```bash
+npm run publish:aws -- --tag beta
+```
+
+Default non-secret publish settings:
+
+- `AWS_REGION=ap-southeast-1`
+- `CODEARTIFACT_DOMAIN=cwncollab`
+- `CODEARTIFACT_DOMAIN_OWNER=619005574504`
+- `CODEARTIFACT_REPOSITORY=cwncollab`
+- `DEFAULT_NPM_REGISTRY=https://registry.npmjs.org/`
+- `CODEARTIFACT_REGISTRY=https://cwncollab-619005574504.d.codeartifact.ap-southeast-1.amazonaws.com/npm/cwncollab/`
+
+Notes:
+
+- `scripts/publish-codeartifact.cjs` is the single cross-platform wrapper around AWS CLI and npm.
+- The script runs `aws codeartifact login`, resets the user-level npm registry back to `npmjs`, and then publishes explicitly to CodeArtifact.
+- `package.json` keeps `publishConfig.registry` pointed at CodeArtifact as a safety net for direct `npm publish` usage.
+- Keep AWS credentials in local AWS CLI config or an `AWS_PROFILE`; do not commit tokens or `.npmrc` credentials.
+- The publish identity needs `codeartifact:GetAuthorizationToken`, `sts:GetServiceBearerToken`, and `codeartifact:PublishPackageVersion`. Add `codeartifact:ReadFromRepository` too if you also want `npm ping` or installs through the same identity.
 
 ## Usage
 
