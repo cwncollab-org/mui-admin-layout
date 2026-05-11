@@ -4,6 +4,12 @@
 
 A Material-UI based admin layout component library for React applications. 
 
+## Versioning
+
+| Package version | React version |
+|-----------------|---------------|
+| `1.1.x`         | React 19.1.x  |
+| `1.2.x`         | React 19.2.x  |
 
 ## Installation
 
